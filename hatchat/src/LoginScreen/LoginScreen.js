@@ -9,9 +9,9 @@ import PasswordInput from "./PasswordInput";
 import {users} from "../DataBase/Database";
 import {useNavigate} from "react-router-dom";
 
-function LoginScreen({ setLoggedIn }) {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+function LoginScreen({setPassword, setUsername, handleLogin}) {
+
+    const navigate = useNavigate();
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value);
@@ -21,28 +21,9 @@ function LoginScreen({ setLoggedIn }) {
         setPassword(event.target.value);
     };
 
-    const navigate = useNavigate();
-    const handleLogin = (event) => {
-        event.preventDefault();
-        const user = users.find((user) => user.userName === username);
-        if (user) {
-            if (user.password === password) {
-                navigate('/chat', {
-                    state: {
-                        fullName: user.fullName, userName: user.userName,
-                        userPassword: user.password,
-                        profilePicture: user.profilePicture
-                    }
-                });
-                setLoggedIn(true);
-            } else {
-                alert('Invalid password');
-            }
-        } else {
-            alert('Invalid username or password');
-        }
-    };
-
+    const handleLoginCheck = () =>{
+        handleLogin(navigate);
+    }
     return (
         <>
             <GeneralBackground/>
@@ -50,7 +31,7 @@ function LoginScreen({ setLoggedIn }) {
                 <form>
                     <UserNameInput handleUserNameClick={handleUsernameChange}/>
                     <PasswordInput onChange={handlePasswordChange}/>
-                    <LoginButton handleLogin={handleLogin}/>
+                    <LoginButton handleLogin={handleLoginCheck}/>
                     <DisclaimerText/>
                 </form>
             </RegisterBox>

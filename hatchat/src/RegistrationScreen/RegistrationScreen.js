@@ -11,37 +11,9 @@ import PasswordInputAndReq from './PasswordInputAndReq';
 import {users} from '../DataBase/Database';
 import {useNavigate} from 'react-router-dom';
 
-const handleCreateAccount = (
-    fullName,
-    profilePicture,
-    password,
-    confirmPassword,
-    userName,
-    navigate
-) => {
-    if (
-        fullName === '' ||
-        password === '' ||
-        confirmPassword === '' ||
-        userName === ''
-    ) {
-        alert('Please fill in all the required fields.');
-        return;
-    }
 
-    const newUser = {
-        fullName,
-        userName,
-        password,
-        profilePicture,
-    };
 
-    users.push(newUser);
-
-    navigate('/');
-};
-
-function RegistrationScreen() {
+function RegistrationScreen({handleCreateAccount}) {
     const [fullName, setFullName] = useState('');
     const [profilePicture, setProfilePicture] = useState(null);
     const [password, setPassword] = useState('');
@@ -51,6 +23,7 @@ function RegistrationScreen() {
     const [passwordMatch, setPasswordMatch] = useState(false);
 
     const navigate = useNavigate();
+
 
     const handleUserNameChange = (e) => {
         setUserName(e.target.value);

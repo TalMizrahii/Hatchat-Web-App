@@ -25,10 +25,7 @@ function ChatScreen() {
     const [contactsMsg, setContactMsg] = useState(ContactMsg);
     const [currentContactId, setCurrentContactId] = useState(-1);
 
-    let userProfilePicture = 'https://images.squarespace-cdn.com/content/v1/5c76de607fdcb8facd765433/1592926322727-OL8OFAUGXH0Q5XMF6AXC/IMG-4874.JPG';
-    if (profilePicture) {
-        userProfilePicture = URL.createObjectURL(profilePicture);
-    }
+
 
     const navigate = useNavigate();
 
@@ -106,12 +103,12 @@ function ChatScreen() {
             <GeneralBackground/>
             <GeneralContainer>
                 {/*Contains all components about the list of contacts and the search and menu functionality.*/}
-                <ChatSpace handleLogout={handleLogout} profilePicture={userProfilePicture}
+                <ChatSpace handleLogout={handleLogout} profilePicture={profilePicture}
                            handleContactSwitch={handleContactSwitch}
                            handleSearch={handleSearch} addContact={addContact}
                            filteredContacts={filteredContacts}/>
                 {/*Contains all components about the conversation with the contacts*/}
-                <ConversationSpace profilePicture={userProfilePicture} currentContact={currentContact}
+                <ConversationSpace profilePicture={profilePicture} currentContact={currentContact}
                                    currentContactId={currentContactId}
                                    contactsMsg={contactsMsg} handleNewMessage={handleNewMessage}/>
             </GeneralContainer>
