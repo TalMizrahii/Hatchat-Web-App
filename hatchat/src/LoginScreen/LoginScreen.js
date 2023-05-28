@@ -9,7 +9,7 @@ import PasswordInput from "./PasswordInput";
 import {users} from "../DataBase/Database";
 import {useNavigate} from "react-router-dom";
 
-function LoginScreen() {
+function LoginScreen({ setLoggedIn }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -34,6 +34,7 @@ function LoginScreen() {
                         profilePicture: user.profilePicture
                     }
                 });
+                setLoggedIn(true);
             } else {
                 alert('Invalid password');
             }
