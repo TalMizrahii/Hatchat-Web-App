@@ -82,7 +82,6 @@ const App = () => {
                 profilePicture: username,
             }
         });
-
     };
 
     return (
