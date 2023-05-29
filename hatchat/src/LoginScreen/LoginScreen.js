@@ -6,7 +6,6 @@ import {useState} from 'react';
 import DisclaimerText from "../GeneralComponents/DisclaimerText";
 import RegisterBox from "../GeneralComponents/RegisterBox";
 import PasswordInput from "./PasswordInput";
-import {users} from "../DataBase/Database";
 import {useNavigate} from "react-router-dom";
 
 
@@ -15,7 +14,6 @@ function LoginScreen({setCurrentUser}) {
     const [password, setPassword] = useState('');
 
     const navigate = useNavigate();
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -46,8 +44,8 @@ function LoginScreen({setCurrentUser}) {
             // Navigate to the home page.
             navigate('/chat');
         }
-
     };
+
     const handleUsernameChange = (event) => {
         setUsername(event.target.value);
     };

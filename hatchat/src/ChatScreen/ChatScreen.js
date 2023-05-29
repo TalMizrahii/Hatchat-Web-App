@@ -17,16 +17,40 @@ const exitToLogin = (navigate) => {
 
 function ChatScreen({currentUser}) {
     const [searchContent, setSearchContent] = useState("");
+
     const [filteredContacts, setFilteredContacts] = useState(ContactsData);
     const [contactsMsg, setContactMsg] = useState(ContactMsg);
     const [currentContactId, setCurrentContactId] = useState(-1);
+
     const navigate = useNavigate();
 
-    console.log("cu: " + currentUser.username);
-    console.log("cu: " + currentUser.token);
+    console.log("current user: " + currentUser.username);
+    console.log("current user: " + currentUser.token);
 
     const profilePicture = 'https://images.squarespace-cdn.com/content/v1/5c76de607fdcb8facd765433/1592926322727-OL8OFAUGXH0Q5XMF6AXC/IMG-4874.JPG';
 
+    // async function getCurrentUser(){
+    //     const res = await fetch('http://localhost:5000/api/Tokens', {
+    //         'method': 'get',
+    //         'headers': {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         'body': JSON.stringify(credentials)
+    //     })
+    //     if (!res.ok) {
+    //         // Display an error message.
+    //         alert("Invalid username or password");
+    //     } else {
+    //         const token = await res.text();
+    //         // console.log("token: " + token);
+    //         setCurrentUser({
+    //             username: username.toString(),
+    //             token: token.toString(),
+    //         })
+    //         // Navigate to the home page.
+    //         navigate('/chat');
+    //
+    // }
 
     const handleLogout = () => {
         setSearchContent("");
