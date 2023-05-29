@@ -15,16 +15,17 @@ const exitToLogin = (navigate) => {
     return navigate('/')
 };
 
-function ChatScreen() {
-    const {state} = useLocation();
-    const {fullName = '', userName = '', userPassword = '', profilePicture = ''} = state || {};
-    console.log(fullName, userName, userPassword, profilePicture);
-
+function ChatScreen({currentUser}) {
     const [searchContent, setSearchContent] = useState("");
     const [filteredContacts, setFilteredContacts] = useState(ContactsData);
     const [contactsMsg, setContactMsg] = useState(ContactMsg);
     const [currentContactId, setCurrentContactId] = useState(-1);
     const navigate = useNavigate();
+
+    console.log("cu: " + currentUser.username);
+    console.log("cu: " + currentUser.token);
+
+    const profilePicture = 'https://images.squarespace-cdn.com/content/v1/5c76de607fdcb8facd765433/1592926322727-OL8OFAUGXH0Q5XMF6AXC/IMG-4874.JPG';
 
 
     const handleLogout = () => {
@@ -92,9 +93,7 @@ function ChatScreen() {
     const handleContactSwitch = (content) => {
         setCurrentContactId(content);
     }
-
     let currentContact = ContactsData.find((contact) => contact.id === currentContactId);
-
 
     return (
         <>

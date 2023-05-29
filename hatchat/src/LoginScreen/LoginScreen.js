@@ -10,14 +10,14 @@ import {users} from "../DataBase/Database";
 import {useNavigate} from "react-router-dom";
 
 
-function LoginScreen() {
+function LoginScreen({setCurrentUser}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const navigate = useNavigate();
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const credentials = {
@@ -26,29 +26,27 @@ function LoginScreen() {
         };
 
         // Send the credentials to the server.
-        fetch('http://localhost:5000/api/Tokens', {
+        const res = await fetch('http://localhost:5000/api/Tokens', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',
             },
             'body': JSON.stringify(credentials)
-        }).then(data => {
-                console.log("data: " + data.text());
-                if (!data.ok) {
-                    // Display an error message.
-                    alert("Invalid username or password");
-                } else {
-                    // Navigate to the home page.
-                    navigate('/chat', {
-                        state: {
-                            fullName: username,
-                            userName: username,
-                            userPassword: password,
-                            profilePicture: username
-                        }
-                    });
-                }
-            });
+        })
+        if (!res.ok) {
+            // Display an error message.
+            alert("Invalid username or password");
+        } else {
+            const token = await res.text();
+            // console.log("token: " + token);
+            setCurrentUser({
+                username: username.toString(),
+                token: token.toString(),
+            })
+            // Navigate to the home page.
+            navigate('/chat');
+        }
+
     };
     const handleUsernameChange = (event) => {
         setUsername(event.target.value);
@@ -57,7 +55,6 @@ function LoginScreen() {
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
     };
-
 
     return (
         <>

@@ -8,6 +8,8 @@ import {users} from "./DataBase/Database";
 
 const App = () => {
 
+    const [currentUser, setCurrentUser] = useState(null);
+
         const handleCreateAccount = async (
             fullName,
             profilePicture,
@@ -57,17 +59,16 @@ const App = () => {
                 'body': JSON.stringify(data)
             });
             const responseData = await res.json(); // Parse the response body
-            console.log("creation res: ", responseData);
+            console.log("creation res: ", responseData.text);
         }
-
 
 
         return (
             <Router>
                 <Routes>
                     <Route path="/" element={<Outlet/>}>
-                        <Route path="/" element={<LoginScreen />}/>
-                        <Route path="/chat" element={<ChatScreen/>}/>
+                        <Route path="/" element={<LoginScreen setCurrentUser={setCurrentUser}/>}/>
+                        <Route path="/chat" element={<ChatScreen currentUser={currentUser}/>}/>
                         <Route path="/register" element={<RegistrationScreen handleCreateAccount={handleCreateAccount}/>}/>
                     </Route>
                 </Routes>
