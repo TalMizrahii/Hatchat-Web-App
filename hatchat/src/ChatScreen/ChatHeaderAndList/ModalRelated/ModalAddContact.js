@@ -23,6 +23,7 @@ function ModalAddContact({ addContact, filteredContacts }) {
     });
 
     const handleChange = (event) => {
+        event.preventDefault()
         const { name, value } = event.target;
         setContactData((prevData) => ({
             ...prevData,

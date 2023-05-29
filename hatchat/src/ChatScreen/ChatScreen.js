@@ -24,10 +24,8 @@ function ChatScreen() {
     const [filteredContacts, setFilteredContacts] = useState(ContactsData);
     const [contactsMsg, setContactMsg] = useState(ContactMsg);
     const [currentContactId, setCurrentContactId] = useState(-1);
-
-
-
     const navigate = useNavigate();
+
 
     const handleLogout = () => {
         setSearchContent("");
