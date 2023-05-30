@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const users = new Schema({
-    userName: {
+    username: {
         type: String,
         require: true,
         unique: true
@@ -24,4 +24,4 @@ const users = new Schema({
 
 const Users = mongoose.model('users', users);
 
-module.exports = Users;
+export default Users;

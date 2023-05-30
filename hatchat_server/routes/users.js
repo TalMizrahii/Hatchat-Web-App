@@ -3,10 +3,10 @@ import userController from '../controllers/users.js';
 
 const router = Router();
 
-router.route('/Users')
+router.route('/')
     .post(userController.addNewUser);
 
-router.route('/Users/:id')
+router.route('/:id')
     .get(userController.getUserByUserName);
 
 export default router;

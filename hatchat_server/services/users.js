@@ -1,4 +1,4 @@
-import Users from '../models/users.js';
+import Users from "../models/users.js";
 import defaultProfilePic from '../defaultProfilePic.js';
 
 const isValidBase64 = (value) => {
@@ -53,4 +53,4 @@ const getUserByUserName = async (id) => {
 };
 
 
-module.exports = {addNewUser, getUserByUserName}
+export default {addNewUser, getUserByUserName};
