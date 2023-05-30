@@ -1,4 +1,4 @@
-import Register from '../models/users.js';
+import Users from '../models/users.js';
 import defaultProfilePic from '../defaultProfilePic.js';
 
 const isValidBase64 = (value) => {
@@ -10,12 +10,12 @@ const isValidBase64 = (value) => {
     }
 };
 
-const userService = async (userName, password, displayName, profilePic) => {
+const addNewUser = async (userName, password, displayName, profilePic) => {
     if (profilePic && !isValidBase64(profilePic)) {
         throw new Error('Invalid base64 string for profilePic');
     }
 
-    const newUser = new Register({
+    const newUser = new Users({
         userName: userName,
         password: password,
         displayName: displayName,
@@ -23,13 +23,34 @@ const userService = async (userName, password, displayName, profilePic) => {
     });
 
     try {
-        await newUser.save();
         // Handle successful save
-        return newUser;
+        return await newUser.save();
     } catch (error) {
         // Handle the error
         console.error(error);
+        return {
+            title: 'Conflict',
+            status: 409,
+        };
     }
 };
 
-module.exports = {userService}
+
+const getUserByUserName = async (id) => {
+
+    const user = await Users.findById(id, 'userName displayName profilePic');
+    if (!user) {
+        console.error('User not found');
+        return false;
+    }
+    const {userName, displayName, profilePic} = user;
+    return {
+        userName,
+        displayName,
+        profilePic
+    };
+
+};
+
+
+module.exports = {addNewUser, getUserByUserName}

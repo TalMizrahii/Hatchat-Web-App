@@ -6,7 +6,7 @@ const users = new Schema({
     userName: {
         type: String,
         require: true,
-        unique: true // Adding the unique constraint
+        unique: true
     },
     password: {
         type: String,
@@ -18,11 +18,10 @@ const users = new Schema({
     },
     profilePic: {
         type: String,
-        //Miz need to give me his default img (Yuval plz note to convert it to base64)
-        require: true
+        require: false
     }
     });
 
-const Users = mongoose.model('register', users);
+const Users = mongoose.model('users', users);
 
 module.exports = Users;
