@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import ModalInputIdOrName from "./ModalInputIdOrName";
 import AddContactBtn from "./AddContactBtn";
 import CloseModalBtn from "./CloseModalBtn";
 import ModalTitle from "./ModalTitle";
-import ProfilePicsPaths from "./ProfilePicsPaths";
-import modalAddContactWrap from "./ModalAddContactWrap";
 
-function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts }) {
+function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts}) {
     const [index, setIndex] = useState(0);
 
     const [contactData, setContactData] = useState({
@@ -26,7 +24,7 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts 
 
     async function handleAddChatToServer() {
         const data = {
-            "username" : contactData.name
+            "username": contactData.name
         };
 
         const res = await fetch('http://localhost:5000/api/Chats', {
@@ -48,18 +46,19 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts 
                 id: responseData.id,
                 // profilePic: responseData.user.profilePic,
                 name: responseData.username,
+                profilePic: responseData.profilePic,
             }));
 
         } else {
             const responseData = await res.json();
             console.log("adding user res: ", responseData);
-            alert("Error during adding")
+            alert("Error during adding");
         }
     }
 
     const handleChange = (event) => {
-        event.preventDefault()
-        const { name, value } = event.target;
+        event.preventDefault();
+        const {name, value} = event.target;
         setContactData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -67,7 +66,10 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts 
     };
 
     const handleAddContact = () => {
+
+
         const res = handleAddChatToServer();
+
         if (
             contactData.name === "" ||
             contactData.id === null ||
@@ -81,21 +83,14 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts 
         const existingContact = filteredContacts.find(
             (contact) => contact.id === contactData.id
         );
+
         if (existingContact) {
-            console.log("contact exist");
+            console.log("contact already exist");
             return;
         }
 
-        const profilePic = ProfilePicsPaths[index];
-        setIndex((index + 1) % 5);
-
         // Assign the loaded image to the profilePic property
-        const newContactData = {
-            ...contactData,
-            profilePic,
-        };
-
-        addContact(newContactData);
+        addContact(contactData);
         // Reset the input fields
         setContactData({
             id: null,
@@ -118,7 +113,7 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts 
 
     return (
         <>
-            <ModalTitle />
+            <ModalTitle/>
             <div className="modal-body">
                 <ModalInputIdOrName
                     label="Contact's name"
@@ -129,8 +124,8 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts 
                 />
             </div>
             <div className="modal-footer">
-                <CloseModalBtn />
-                <AddContactBtn handleAddContact={handleAddContact} />
+                <CloseModalBtn/>
+                <AddContactBtn handleAddContact={handleAddContact}/>
             </div>
         </>
     );

@@ -8,7 +8,7 @@ function UserInList({ contact, handleContactSwitch }) {
     return (
         <li className="contactChat list-group-item list-group-item-action" onClick={handleClick}>
             <div className="user-img">
-                <img className="dp" src={contact.profilePic} alt="" />
+                <img className="dp" src={contact.profilePic} alt="avatar 1" />
             </div>
             <div className="userName">{truncatedName}</div>
             <div className="timeAndHour">{contact.lastSeen}</div>
