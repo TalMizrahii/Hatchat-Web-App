@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-const register = new Schema({
+const users = new Schema({
     userName: {
         type: String,
         require: true,
@@ -23,6 +23,6 @@ const register = new Schema({
     }
     });
 
-const Register = mongoose.model('register', register);
+const Users = mongoose.model('register', users);
 
-module.exports = Register;
+module.exports = Users;

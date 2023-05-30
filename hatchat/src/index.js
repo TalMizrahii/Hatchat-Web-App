@@ -81,7 +81,7 @@ const App = () => {
                         element={<ChatScreen currentUsernameAndToken={currentUsernameAndToken}/>}
                     />
                     <Route
-                        path="/register"
+                        path="/users"
                         element={<RegistrationScreen handleCreateAccount={handleCreateAccount}/>}
                     />
                 </Route>
