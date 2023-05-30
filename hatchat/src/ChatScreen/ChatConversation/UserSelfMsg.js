@@ -1,6 +1,6 @@
 import React from "react";
 
-function UserSelfMsg({msg, profilePicture}) {
+function UserSelfMsg({msg, activeUser}) {
 
     return (
         <div className="chatText d-flex flex-row justify-content-end">
@@ -13,7 +13,7 @@ function UserSelfMsg({msg, profilePicture}) {
             </div>
             <img
                 className="chatImg"
-                src={profilePicture}
+                src={activeUser.profilePic}
                 alt="avatar 1"
             />
         </div>

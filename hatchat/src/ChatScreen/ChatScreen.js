@@ -4,7 +4,7 @@ import GeneralBackground from "../GeneralComponents/GeneralBackground";
 import GeneralContainer from "./GeneralContainer";
 import ChatSpace from "./ChatHeaderAndList/ChatSpace";
 import ConversationSpace from "./ChatConversation/ConversationSpace";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import ContactMsg from "../DataBase/contactMsg";
 import {useNavigate} from "react-router-dom";
 import ContactsData from "../DataBase/ContactsData";
@@ -16,20 +16,32 @@ const exitToLogin = (navigate) => {
 
 function ChatScreen({currentUsernameAndToken}) {
     const [searchContent, setSearchContent] = useState("");
-    const [activeUser, setActiveUser] = useState(null);
-
-
+    const [activeUser, setActiveUser] = useState({});
     const [filteredContacts, setFilteredContacts] = useState(ContactsData);
     const [contactsMsg, setContactMsg] = useState(ContactMsg);
     const [currentContactId, setCurrentContactId] = useState(-1);
-
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await getCurrentUser();
+            } catch (error) {
+                // Handle the error here
+                console.error("Error fetching user:", error);
+                // Display an error message.
+                alert("Error fetching user");
+                navigate('/');
+            }
+        };
+        fetchData(); // Call the fetchData function
+        // Add missing dependencies to the dependency array
+    }, [navigate, currentUsernameAndToken]);
 
     console.log("current username: " + currentUsernameAndToken.username);
     console.log("current userToken: " + currentUsernameAndToken.token);
 
-    async function getCurrentUser() {
-
+    const getCurrentUser = async () => {
         // Create the path to the user in the server.
         const getUserPath = 'http://localhost:5000/api/Users/' + currentUsernameAndToken.username;
         const res = await fetch(getUserPath, {
@@ -37,9 +49,9 @@ function ChatScreen({currentUsernameAndToken}) {
             'headers': {
                 'Content-Type': 'application/json',
                 'Authorization': currentUsernameAndToken.token,
-                'username' : currentUsernameAndToken.username,
+                'username': currentUsernameAndToken.username,
             },
-        })
+        });
         if (!res.ok) {
             // Display an error message.
             alert("Invalid username or password");
@@ -47,14 +59,10 @@ function ChatScreen({currentUsernameAndToken}) {
         } else {
             const currentActiveUser = await res.json();
             setActiveUser(currentActiveUser);
-            console.log("ActiveProfile: " + activeUser.profilePic);
         }
+    };
 
-    }
-
-    const res = getCurrentUser();
-    const profilePicture = 'https://images.squarespace-cdn.com/content/v1/5c76de607fdcb8facd765433/1592926322727-OL8OFAUGXH0Q5XMF6AXC/IMG-4874.JPG';
-
+    // const profilePicture = 'https://images.squarespace-cdn.com/content/v1/5c76de607fdcb8facd765433/1592926322727-OL8OFAUGXH0Q5XMF6AXC/IMG-4874.JPG';
 
     const handleLogout = () => {
         setSearchContent("");
@@ -88,14 +96,12 @@ function ChatScreen({currentUsernameAndToken}) {
             text: content.text,
             timeAndDate: content.timeAndDate,
         };
-
         setContactMsg((prevContactMsg) => {
             const updatedContactMsg = {...prevContactMsg};
             updatedContactMsg[currentContactId] = [
                 ...(updatedContactMsg[currentContactId] || []),
                 newMessage,
             ];
-
             // Update the bio and lastSeen of the current contact
             setFilteredContacts((prevFilteredContacts) => {
                 const updatedContacts = [...prevFilteredContacts];
@@ -112,7 +118,6 @@ function ChatScreen({currentUsernameAndToken}) {
                 }
                 return updatedContacts;
             });
-
             return updatedContactMsg;
         });
     };
@@ -128,12 +133,15 @@ function ChatScreen({currentUsernameAndToken}) {
             <GeneralBackground/>
             <GeneralContainer>
                 {/*Contains all components about the list of contacts and the search and menu functionality.*/}
-                <ChatSpace handleLogout={handleLogout} profilePicture={profilePicture}
+                <ChatSpace currentUsernameAndToken={currentUsernameAndToken}
+                           handleLogout={handleLogout}
+                           activeUser={activeUser}
                            handleContactSwitch={handleContactSwitch}
-                           handleSearch={handleSearch} addContact={addContact}
+                           handleSearch={handleSearch}
+                           addContact={addContact}
                            filteredContacts={filteredContacts}/>
                 {/*Contains all components about the conversation with the contacts*/}
-                <ConversationSpace profilePicture={profilePicture} currentContact={currentContact}
+                <ConversationSpace activeUser={activeUser} currentContact={currentContact}
                                    currentContactId={currentContactId}
                                    contactsMsg={contactsMsg} handleNewMessage={handleNewMessage}/>
             </GeneralContainer>
