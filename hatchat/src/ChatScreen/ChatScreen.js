@@ -26,6 +26,7 @@ function ChatScreen({currentUsernameAndToken}) {
         const fetchData = async () => {
             try {
                 await getCurrentUser();
+                await handleChatsFromServer();
             } catch (error) {
                 // Handle the error here
                 console.error("Error fetching user:", error);
@@ -50,9 +51,9 @@ function ChatScreen({currentUsernameAndToken}) {
             },
         });
         if (!res.ok) {
+            navigate('/');
             // Display an error message.
             alert("Invalid username or password");
-            navigate('/');
         } else {
             const currentActiveUser = await res.json();
             setActiveUser(currentActiveUser);
@@ -86,11 +87,50 @@ function ChatScreen({currentUsernameAndToken}) {
         setCurrentContactId(contact.id);
     };
 
+
+    const handleChatsFromServer = async () => {
+        try {
+            const res = await fetch('http://localhost:5000/api/Chats', {
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': currentUsernameAndToken.token,
+                },
+            });
+            if (!res.ok) {
+                navigate('/');
+                // Display an error message.
+                alert('Chat loading failed');
+            } else {
+                const allChats = await res.json();
+                allChats.forEach((chat) => {
+                    const contact = {
+                        id: chat.id,
+                        name: chat.user.displayName,
+                        profilePic: chat.user.profilePic,
+                    };
+                    addContact(contact);
+                });
+            }
+        } catch (error) {
+            // Handle the error here
+            console.error('Error fetching chats:', error);
+            // Display an error message.
+            alert('Error fetching chats');
+            navigate('/');
+        }
+    };
+
+
     const handleNewMessage = (content) => {
+
         const newMessage = {
             text: content.text,
             timeAndDate: content.timeAndDate,
         };
+
+
+
         setContactMsg((prevContactMsg) => {
             const updatedContactMsg = {...prevContactMsg};
             updatedContactMsg[currentContactId] = [

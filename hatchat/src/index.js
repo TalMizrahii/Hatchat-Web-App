@@ -58,12 +58,10 @@ const App = () => {
 
         if (res.ok) {
             const responseData = await res.text();
-            console.log('creation res: ', responseData);
-            alert('created successfully');
             navigate('/');
+            alert('created successfully');
         } else {
             const responseData = await res.text();
-            console.log('creation res: ', responseData);
             alert('Error during creation.');
         }
     }

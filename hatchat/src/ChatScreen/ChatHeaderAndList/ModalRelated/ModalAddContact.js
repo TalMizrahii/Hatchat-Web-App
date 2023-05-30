@@ -38,6 +38,10 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts}
             "username": contactData.name
         };
 
+        if (!validateIsInList(contactData.name)) {
+            return;
+        }
+
         const res = await fetch('http://localhost:5000/api/Chats', {
             'method': 'post',
             'headers': {
@@ -46,12 +50,18 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts}
             },
             'body': JSON.stringify(data)
         });
-        const response = await res.json();
-        if (res.ok) {
-            if(!validateIsInList(response.user.username)){
-                return;
+        let response;
+        try {
+            response = await res.json();
+        } catch (error) {
+            if (error instanceof SyntaxError) {
+                alert(error);
+            } else {
+                alert(error);
             }
-            console.log("resFromtest: ");
+            return;
+        }
+        if (res.ok) {
             const newContact = {
                 id: response.id,
                 name: response.user.username,
@@ -83,7 +93,6 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts}
     const handleAddContact = () => {
         const res = handleAddChatToServer();
     };
-
 
     return (
         <>
