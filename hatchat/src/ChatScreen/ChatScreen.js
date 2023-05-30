@@ -38,9 +38,6 @@ function ChatScreen({currentUsernameAndToken}) {
         // Add missing dependencies to the dependency array
     }, [navigate, currentUsernameAndToken]);
 
-    console.log("current username: " + currentUsernameAndToken.username);
-    console.log("current userToken: " + currentUsernameAndToken.token);
-
     const getCurrentUser = async () => {
         // Create the path to the user in the server.
         const getUserPath = 'http://localhost:5000/api/Users/' + currentUsernameAndToken.username;
@@ -86,10 +83,12 @@ function ChatScreen({currentUsernameAndToken}) {
     };
 
     const addContact = (contact) => {
+        console.log("addContact testtt" + contact.profilePicture);
         ContactsData.push(contact);
-        setFilteredContacts([...ContactsData]);
+        setFilteredContacts([contact]);
         setCurrentContactId(contact.id);
     };
+
 
     const handleNewMessage = (content) => {
         const newMessage = {
@@ -141,9 +140,11 @@ function ChatScreen({currentUsernameAndToken}) {
                            addContact={addContact}
                            filteredContacts={filteredContacts}/>
                 {/*Contains all components about the conversation with the contacts*/}
-                <ConversationSpace activeUser={activeUser} currentContact={currentContact}
+                <ConversationSpace activeUser={activeUser}
+                                   currentContact={currentContact}
                                    currentContactId={currentContactId}
-                                   contactsMsg={contactsMsg} handleNewMessage={handleNewMessage}/>
+                                   contactsMsg={contactsMsg}
+                                   handleNewMessage={handleNewMessage}/>
             </GeneralContainer>
         </>
     );

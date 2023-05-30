@@ -5,7 +5,6 @@ import CloseModalBtn from "./CloseModalBtn";
 import ModalTitle from "./ModalTitle";
 
 function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts}) {
-    const [index, setIndex] = useState(0);
 
     const [contactData, setContactData] = useState({
         id: null,
@@ -38,15 +37,14 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts}
 
         if (res.ok) {
             const responseData = await res.json();
-            console.log("adding user res: ", responseData);
             alert("adding ok.");
             // Update the contactData properties with the received data
             setContactData(prevData => ({
                 ...prevData,
                 id: responseData.id,
                 // profilePic: responseData.user.profilePic,
-                name: responseData.username,
-                profilePic: responseData.profilePic,
+                name: responseData.user.username,
+                profilePic: responseData.user.profilePic,
             }));
 
         } else {
@@ -66,36 +64,28 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts}
     };
 
     const handleAddContact = () => {
-
-
-        const res = handleAddChatToServer();
-
-        if (
-            contactData.name === "" ||
-            contactData.id === null ||
-            contactData.id === -1 ||
-            !isNumber(contactData.id)
-        ) {
-            return;
-        }
-
         // Check if contact ID already exists
-        const existingContact = filteredContacts.find(
-            (contact) => contact.id === contactData.id
-        );
+        // const existingContact = filteredContacts.find(
+        //     (contact) => contact.id === contactData.id
+        // );
+        //
+        // if (!existingContact) {
+        //     alert("contact already exist");
+        //     return;
+        // }
 
-        if (existingContact) {
-            console.log("contact already exist");
-            return;
-        }
+        console.log("cd1" + contactData.profilePic);
+        const res = handleAddChatToServer();
+        console.log("cd2" + contactData.profilePic);
 
         // Assign the loaded image to the profilePic property
         addContact(contactData);
+
         // Reset the input fields
         setContactData({
             id: null,
             name: "",
-            bio: "Hello",
+            bio: "",
             lastSeen: new Date().toLocaleString("en-US", {
                 month: "long",
                 day: "numeric",
@@ -105,10 +95,6 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts}
             }),
             profilePic: "",
         });
-    };
-
-    const isNumber = (value) => {
-        return /^\d+$/.test(value);
     };
 
     return (
