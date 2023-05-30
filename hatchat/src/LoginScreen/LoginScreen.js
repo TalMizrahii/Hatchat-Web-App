@@ -9,7 +9,7 @@ import PasswordInput from "./PasswordInput";
 import {useNavigate} from "react-router-dom";
 
 
-function LoginScreen({setCurrentUser}) {
+function LoginScreen({setCurrentUsernameAndToken}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -19,8 +19,8 @@ function LoginScreen({setCurrentUser}) {
         e.preventDefault();
 
         const credentials = {
-            "username": username.toString(),
-            "password": password.toString()
+            "username": username,
+            "password": password,
         };
 
         // Send the credentials to the server.
@@ -36,10 +36,11 @@ function LoginScreen({setCurrentUser}) {
             alert("Invalid username or password");
         } else {
             const token = await res.text();
+            const tokenStatement = "Bearer " + token;
             // console.log("token: " + token);
-            setCurrentUser({
-                username: username.toString(),
-                token: token.toString(),
+            setCurrentUsernameAndToken({
+                username: username,
+                token: tokenStatement,
             })
             // Navigate to the home page.
             navigate('/chat');

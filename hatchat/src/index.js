@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router, Routes, Route, Outlet, Navigate} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Outlet} from 'react-router-dom';
 import LoginScreen from './LoginScreen/LoginScreen';
 import ChatScreen from './ChatScreen/ChatScreen';
 import RegistrationScreen from './RegistrationScreen/RegistrationScreen';
-import {users} from "./DataBase/Database";
 
 const App = () => {
-    const [currentUser, setCurrentUser] = useState(null);
+        const [currentUsernameAndToken, setCurrentUsernameAndToken] = useState(null);
 
         const handleCreateAccount = async (
             fullName,
@@ -31,15 +30,8 @@ const App = () => {
                 fullName,
                 userName,
                 password,
-                profilePicture: 'https://images.squarespace-cdn.com/content/v1/5c76de607fdcb8facd765433/1592926322727-OL8OFAUGXH0Q5XMF6AXC/IMG-4874.JPG',
+                profilePicture,
             };
-            // Check if the user added a profile picture.
-            // if (!newUser.profilePicture) {
-            //     // If not, set a default pic.
-            //     newUser.profilePicture = 'https://images.squarespace-cdn.com/content/v1/5c76de607fdcb8facd765433/1592926322727-OL8OFAUGXH0Q5XMF6AXC/IMG-4874.JPG';
-            // }else {
-            //     userName.profilePicture = userName.profilePicture.toString();
-            // }
 
             // newUser.profilePicture = 'https://images.squarespace-cdn.com/content/v1/5c76de607fdcb8facd765433/1592926322727-OL8OFAUGXH0Q5XMF6AXC/IMG-4874.JPG';
             await handleUserToServer(newUser);
@@ -63,11 +55,11 @@ const App = () => {
                 'body': JSON.stringify(data)
             });
 
-            if(res.ok){
+            if (res.ok) {
                 const responseData = await res.text();
                 console.log("creation res: ", responseData);
                 alert("created successfully");
-            }else{
+            } else {
                 const responseData = await res.text();
                 console.log("creation res: ", responseData);
                 alert("Error during creation.")
@@ -75,13 +67,12 @@ const App = () => {
 
         }
 
-
         return (
             <Router>
                 <Routes>
                     <Route path="/" element={<Outlet/>}>
-                        <Route path="/" element={<LoginScreen setCurrentUser={setCurrentUser}/>}/>
-                        <Route path="/chat" element={<ChatScreen currentUser={currentUser}/>}/>
+                        <Route path="/" element={<LoginScreen setCurrentUsernameAndToken={setCurrentUsernameAndToken}/>}/>
+                        <Route path="/chat" element={<ChatScreen currentUsernameAndToken={currentUsernameAndToken}/>}/>
                         <Route path="/register" element={<RegistrationScreen handleCreateAccount={handleCreateAccount}/>}/>
                     </Route>
                 </Routes>
