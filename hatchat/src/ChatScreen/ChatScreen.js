@@ -18,7 +18,7 @@ function ChatScreen({currentUsernameAndToken}) {
     const [searchContent, setSearchContent] = useState("");
     const [activeUser, setActiveUser] = useState({});
     const [filteredContacts, setFilteredContacts] = useState(ContactsData);
-    const [contactsMsg, setContactMsg] = useState(ContactMsg);
+    const [currentFeed, setCurrentFeed] = useState([]);
     const [currentContactId, setCurrentContactId] = useState(-1);
     const navigate = useNavigate();
 
@@ -63,7 +63,7 @@ function ChatScreen({currentUsernameAndToken}) {
     const handleLogout = () => {
         setSearchContent("");
         setFilteredContacts(null);
-        setContactMsg([]);
+        setCurrentFeed([]);
         setCurrentContactId(-1);
         ContactsData.length = 0;
         exitToLogin(navigate);
@@ -82,8 +82,11 @@ function ChatScreen({currentUsernameAndToken}) {
     };
 
     const addContact = (contact) => {
-        ContactsData.push(contact);
-        setFilteredContacts([...ContactsData]);
+        const existingContact = ContactsData.find((c) => c.id === contact.id);
+        if (!existingContact) {
+            ContactsData.push(contact);
+            setFilteredContacts([...ContactsData]);
+        }
         setCurrentContactId(contact.id);
     };
 
@@ -122,57 +125,51 @@ function ChatScreen({currentUsernameAndToken}) {
     };
 
 
-//     const res = await fetch('http://localhost:5000/api/Users', {
-//         method: 'post',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(data)
-//     });
-//
-//     if (res.ok) {
-//         const responseData = await res.text();
-//         navigate('/');
-//         alert('created successfully');
-//     } else {
-//         const responseData = await res.text();
-//         alert('Error during creation.');
-//     }
-// }
+    const handleMessageToServer = async (content) => {
+        const data = {"msg": content.text};
+        const pathToMessageUser = 'http://localhost:5000/api/Chats/' + currentContact.id + '/Messages'
+        const res = await fetch(pathToMessageUser, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': currentUsernameAndToken.token,
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+            const response1 = await res.json();
+            const response2 = await handleMessagePresentation();
+
+        } else {
+            return null;
+        }
+    }
+
+
+    const handleMessagePresentation = async () => {
+        const res = await fetch('http://localhost:5000/api/Chats/' + currentContactId, {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': currentUsernameAndToken.token,
+            },
+        });
+        if (res.ok) {
+            const response = await res.json();
+            setCurrentFeed(response.messages);
+        } else {
+            // Display an error message.
+            alert('Chat loading failed');
+        }
+    };
 
     const handleNewMessage = (content) => {
-
-        const newMessage = {
-            text: content.text,
-            timeAndDate: content.timeAndDate,
-        };
-        setContactMsg((prevContactMsg) => {
-            const updatedContactMsg = {...prevContactMsg};
-            updatedContactMsg[currentContactId] = [
-                ...(updatedContactMsg[currentContactId] || []),
-                newMessage,
-            ];
-            // Update the bio and lastSeen of the current contact
-            setFilteredContacts((prevFilteredContacts) => {
-                const updatedContacts = [...prevFilteredContacts];
-                const contactIndex = updatedContacts.findIndex(
-                    (contact) => contact.id === currentContactId
-                );
-                if (contactIndex !== -1) {
-                    updatedContacts[contactIndex] = {
-                        ...updatedContacts[contactIndex],
-                        bio: newMessage.text.slice(0, 22),
-                        lastSeen: newMessage.timeAndDate,
-                    };
-                    updatedContacts.unshift(updatedContacts.splice(contactIndex, 1)[0]);
-                }
-                return updatedContacts;
-            });
-            return updatedContactMsg;
-        });
+        const response = handleMessageToServer(content);
     };
     const handleContactSwitch = (content) => {
         setCurrentContactId(content);
+        const response2 = handleMessagePresentation();
     }
     let currentContact = ContactsData.find((contact) => contact.id === currentContactId);
 
@@ -189,10 +186,10 @@ function ChatScreen({currentUsernameAndToken}) {
                            addContact={addContact}
                            filteredContacts={filteredContacts}/>
                 {/*Contains all components about the conversation with the contacts*/}
-                <ConversationSpace activeUser={activeUser}
+                <ConversationSpace currentFeed={currentFeed}
+                                   activeUser={activeUser}
                                    currentContact={currentContact}
                                    currentContactId={currentContactId}
-                                   contactsMsg={contactsMsg}
                                    handleNewMessage={handleNewMessage}/>
             </GeneralContainer>
         </>

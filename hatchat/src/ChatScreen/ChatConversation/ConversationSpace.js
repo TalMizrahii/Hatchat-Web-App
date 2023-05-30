@@ -5,11 +5,11 @@ import MsgScrollerGood from "./MsgScrollerGood";
 import ContactResponseMsg from "./ContactResponseMsg";
 import UserSelfMsg from "./UserSelfMsg";
 import ContactMsg from "../../DataBase/contactMsg";
+import {useState} from "react";
 
-function ConversationSpace({activeUser, currentContact, handleNewMessage, currentContactId, contactsMsg}) {
-
+function ConversationSpace({currentFeed, activeUser, handleNewMessage, currentContactId}) {
     const handleFirstNextMessage = (content) => {
-        if(currentContactId === -1){
+        if (currentContactId === -1) {
             return;
         }
         handleNewMessage(content);
@@ -35,14 +35,23 @@ function ConversationSpace({activeUser, currentContact, handleNewMessage, curren
             <MsgWrapperScroll>
                 <InputMsgLowerBar handleFirstNextMessage={handleFirstNextMessage}/>
                 <MsgScrollerGood>
-                    {contactsMsg[currentContactId] && contactsMsg[currentContactId].length > 0 ? (
-                        contactsMsg[currentContactId].map((msg, index) => (
-                            <UserSelfMsg activeUser={activeUser}  key={index} msg={{ ...msg, currentContactId }} />
+                    {currentFeed && currentFeed.length > 0 ? (
+                        currentFeed.map((msg, index) => (
+                            <UserSelfMsg
+                                activeUser={activeUser}
+                                key={index}
+                                msg={{
+                                    sender: msg.sender,
+                                    text: msg.content,
+                                    timeAndDate: msg.created,
+                                }}
+                            />
                         ))
                     ) : (
                         <div>No messages to display</div>
                     )}
                 </MsgScrollerGood>
+
             </MsgWrapperScroll>
         </div>
     );

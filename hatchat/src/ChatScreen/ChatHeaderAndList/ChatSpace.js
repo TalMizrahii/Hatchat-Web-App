@@ -17,7 +17,7 @@ function ChatSpace({   currentUsernameAndToken,
             <div className="col-md-3 g-0 chatScreen">
                 <HeaderBox>
                     <UserImageLeftTopCorner activeUser={activeUser}/>
-                    <NavIcons currentUsernameAndToken={currentUsernameAndToken} handleLogout={handleLogout} filteredContacts={filteredContacts} addContact={addContact} />
+                    <NavIcons handleContactSwitch={handleContactSwitch} currentUsernameAndToken={currentUsernameAndToken} handleLogout={handleLogout} filteredContacts={filteredContacts} addContact={addContact} />
                 </HeaderBox>
                 <SearchInput handleSearch={handleSearch}/>
                 <ListGroupOfContacts handleContactSwitch={handleContactSwitch} filteredContacts={filteredContacts}/>

@@ -4,7 +4,7 @@ import AddContactBtn from "./AddContactBtn";
 import CloseModalBtn from "./CloseModalBtn";
 import ModalTitle from "./ModalTitle";
 
-function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts}) {
+function ModalAddContact({handleContactSwitch, currentUsernameAndToken, addContact, filteredContacts}) {
 
     const [contactData, setContactData] = useState({
         id: null,
@@ -76,6 +76,7 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts}
                 })
             }
             addContact(newContact);
+            handleContactSwitch(newContact.id)
         } else {
             alert("Error during adding");
         }
