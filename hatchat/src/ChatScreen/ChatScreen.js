@@ -122,15 +122,30 @@ function ChatScreen({currentUsernameAndToken}) {
     };
 
 
+//     const res = await fetch('http://localhost:5000/api/Users', {
+//         method: 'post',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(data)
+//     });
+//
+//     if (res.ok) {
+//         const responseData = await res.text();
+//         navigate('/');
+//         alert('created successfully');
+//     } else {
+//         const responseData = await res.text();
+//         alert('Error during creation.');
+//     }
+// }
+
     const handleNewMessage = (content) => {
 
         const newMessage = {
             text: content.text,
             timeAndDate: content.timeAndDate,
         };
-
-
-
         setContactMsg((prevContactMsg) => {
             const updatedContactMsg = {...prevContactMsg};
             updatedContactMsg[currentContactId] = [
@@ -156,8 +171,6 @@ function ChatScreen({currentUsernameAndToken}) {
             return updatedContactMsg;
         });
     };
-
-
     const handleContactSwitch = (content) => {
         setCurrentContactId(content);
     }

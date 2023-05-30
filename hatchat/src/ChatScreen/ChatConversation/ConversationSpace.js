@@ -35,9 +35,6 @@ function ConversationSpace({activeUser, currentContact, handleNewMessage, curren
             <MsgWrapperScroll>
                 <InputMsgLowerBar handleFirstNextMessage={handleFirstNextMessage}/>
                 <MsgScrollerGood>
-                    <ContactResponseMsg currentContact={currentContact}>
-                        Like and subscribe!
-                    </ContactResponseMsg>
                     {contactsMsg[currentContactId] && contactsMsg[currentContactId].length > 0 ? (
                         contactsMsg[currentContactId].map((msg, index) => (
                             <UserSelfMsg activeUser={activeUser}  key={index} msg={{ ...msg, currentContactId }} />
