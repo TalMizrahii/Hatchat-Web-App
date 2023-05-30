@@ -10,6 +10,7 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts}
         id: null,
         name: "",
         bio: "",
+        profilePic: "",
         lastSeen: new Date().toLocaleString("en-US", {
             month: "long",
             day: "numeric",
@@ -17,11 +18,22 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts}
             minute: "numeric",
             hour12: true,
         }),
-        profilePic: "",
     });
 
 
-    async function handleAddChatToServer() {
+    const validateIsInList = (username) => {
+        // Check if contact ID already exists
+        const existingContact = filteredContacts.find(
+            (contact) => contact.name === username
+        );
+        if (existingContact) {
+            alert("contact already exist");
+            return 0;
+        }
+        return 1;
+    }
+
+    const handleAddChatToServer = async () => {
         const data = {
             "username": contactData.name
         };
@@ -34,22 +46,27 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts}
             },
             'body': JSON.stringify(data)
         });
-
+        const response = await res.json();
         if (res.ok) {
-            const responseData = await res.json();
-            alert("adding ok.");
-            // Update the contactData properties with the received data
-            setContactData(prevData => ({
-                ...prevData,
-                id: responseData.id,
-                // profilePic: responseData.user.profilePic,
-                name: responseData.user.username,
-                profilePic: responseData.user.profilePic,
-            }));
-
+            if(!validateIsInList(response.user.username)){
+                return;
+            }
+            console.log("resFromtest: ");
+            const newContact = {
+                id: response.id,
+                name: response.user.username,
+                bio: "",
+                profilePic: response.user.profilePic,
+                lastSeen: new Date().toLocaleString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                })
+            }
+            addContact(newContact);
         } else {
-            const responseData = await res.json();
-            console.log("adding user res: ", responseData);
             alert("Error during adding");
         }
     }
@@ -64,38 +81,9 @@ function ModalAddContact({currentUsernameAndToken, addContact, filteredContacts}
     };
 
     const handleAddContact = () => {
-        // Check if contact ID already exists
-        // const existingContact = filteredContacts.find(
-        //     (contact) => contact.id === contactData.id
-        // );
-        //
-        // if (!existingContact) {
-        //     alert("contact already exist");
-        //     return;
-        // }
-
-        console.log("cd1" + contactData.profilePic);
         const res = handleAddChatToServer();
-        console.log("cd2" + contactData.profilePic);
-
-        // Assign the loaded image to the profilePic property
-        addContact(contactData);
-
-        // Reset the input fields
-        setContactData({
-            id: null,
-            name: "",
-            bio: "",
-            lastSeen: new Date().toLocaleString("en-US", {
-                month: "long",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-            }),
-            profilePic: "",
-        });
     };
+
 
     return (
         <>
