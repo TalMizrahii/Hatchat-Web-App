@@ -1,16 +1,17 @@
 import jwt from 'jsonwebtoken';
 import Users from '../models/users.js';
-import Authenticator from "../controllers/authenticator.js";
 
 
 const key = 'y6SNjgPbm3X^x2jgX5nG@8dT2T!D9X';
 const generateToken = async (username, password) => {
     try {
+
+        console.log(username)
         // Find the user in the database based on the provided username
-        const user = await Users.findById(username, 'username password');
-        const {userName, userPassword} = user;
+        const user = await Users.findOne({"username": username}).populate('username password')
+
         // Check if a user with the provided username exists and verify the password
-        if (userName ===  username && userPassword === password) {
+        if (user.username === username && user.password === password) {
             const data = {username};
             // Generate the token and return the token
             return jwt.sign(data, key);

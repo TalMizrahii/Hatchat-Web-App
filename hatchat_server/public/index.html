@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple HTML Page</title>
+</head>
+<script>
+    const regi = async () => {
+        const data = {
+            username: document.getElementsByTagName("input")[0].value,
+            password: document.getElementsByTagName("input")[1].value,
+            displayName: document.getElementsByTagName("input")[2].value,
+            profilePic: document.getElementsByTagName("input")[3].value
+        }
+        console.log(data);
+        const res = await fetch('http://localhost:12345/api/Users', {
+                'method': 'post',
+                'headers': {
+                    'Content-Type': 'application/json',
+                },
+                'body': JSON.stringify(data)
+            }
+        )
+        await console.log(res);
+    }
+
+
+    const login = async () => {
+        const data = {
+            username: document.getElementsByTagName("input")[0].value,
+            password: document.getElementsByTagName("input")[1].value
+        }
+        console.log(data);
+        const res = await fetch('http://localhost:12345/api/Tokens', {
+                'method': 'post',
+                'headers': {
+                    'Content-Type': 'application/json',
+                },
+                'body': JSON.stringify(data)
+            }
+        )
+        await console.log(res);
+    }
+</script>
+
+
+<body>
+<input type="text" placeholder="Username">
+<br>
+<br>
+<input type="text" placeholder="Password">
+<br>
+<br>
+<input type="text" placeholder="Display name">
+<br>
+<br>
+<input type="text" placeholder="Profile Pic">
+<br>
+<br>
+<button onclick="regi()">Register</button>
+<button onclick="login()">Login</button>
+</body>
+</html>
