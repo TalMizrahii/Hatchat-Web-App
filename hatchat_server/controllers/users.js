@@ -2,7 +2,7 @@ import userService from '../services/users.js'
 import authenticatorService from "../services/authenticator.js";
 
 const addNewUser = async (req, res) => {
-    res.json(await userService.addNewUser(req.body.userName, req.body.password, req.body.displayName, req.body.profilePic));
+    res.json(await userService.addNewUser(req.body.username, req.body.password, req.body.displayName, req.body.profilePic));
 };
 
 const getUserByUserName = async (req, res) => {

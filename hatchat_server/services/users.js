@@ -10,13 +10,13 @@ const isValidBase64 = (value) => {
     }
 };
 
-const addNewUser = async (userName, password, displayName, profilePic) => {
+const addNewUser = async (username, password, displayName, profilePic) => {
     if (profilePic && !isValidBase64(profilePic)) {
         throw new Error('Invalid base64 string for profilePic');
     }
 
     const newUser = new Users({
-        userName: userName,
+        username: username,
         password: password,
         displayName: displayName,
         profilePic: profilePic || defaultProfilePic,
