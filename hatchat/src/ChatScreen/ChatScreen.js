@@ -22,11 +22,15 @@ function ChatScreen({currentUsernameAndToken}) {
     const [currentContactId, setCurrentContactId] = useState(-1);
     const navigate = useNavigate();
 
+    let currentContact = ContactsData.find((contact) => contact.id === currentContactId);
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 await getCurrentUser();
                 await handleChatsFromServer();
+                handleContactSwitch(currentContactId);
             } catch (error) {
                 // Handle the error here
                 console.error("Error fetching user:", error);
@@ -102,8 +106,6 @@ function ChatScreen({currentUsernameAndToken}) {
             });
             if (!res.ok) {
                 navigate('/');
-                // Display an error message.
-                alert('Chat loading failed');
             } else {
                 const allChats = await res.json();
                 allChats.forEach((chat) => {
@@ -114,6 +116,7 @@ function ChatScreen({currentUsernameAndToken}) {
                     };
                     addContact(contact);
                 });
+                const resMessages = await handleMessagePresentation();
             }
         } catch (error) {
             // Handle the error here
@@ -126,6 +129,7 @@ function ChatScreen({currentUsernameAndToken}) {
 
 
     const handleMessageToServer = async (content) => {
+        // Create a data json to send to the server.
         const data = {"msg": content.text};
         const pathToMessageUser = 'http://localhost:5000/api/Chats/' + currentContact.id + '/Messages'
         const res = await fetch(pathToMessageUser, {
@@ -138,17 +142,15 @@ function ChatScreen({currentUsernameAndToken}) {
         });
 
         if (res.ok) {
-            const response1 = await res.json();
-            const response2 = await handleMessagePresentation();
-
+            const response = await res.json();
+            setCurrentFeed(prevFeed => [...prevFeed, response]);
         } else {
             return null;
         }
     }
 
-
-    const handleMessagePresentation = async () => {
-        const res = await fetch('http://localhost:5000/api/Chats/' + currentContactId, {
+    const handleMessagePresentation = async (contactId) => {
+        const res = await fetch('http://localhost:5000/api/Chats/' + contactId, {
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',
@@ -158,20 +160,25 @@ function ChatScreen({currentUsernameAndToken}) {
         if (res.ok) {
             const response = await res.json();
             setCurrentFeed(response.messages);
+            console.log("cf: " + currentFeed + "id " + contactId);
         } else {
             // Display an error message.
-            alert('Chat loading failed');
         }
     };
 
     const handleNewMessage = (content) => {
         const response = handleMessageToServer(content);
     };
-    const handleContactSwitch = (content) => {
-        setCurrentContactId(content);
-        const response2 = handleMessagePresentation();
+    const handleContactSwitch = (contactId) => {
+        if (contactId === currentContactId) {
+            return;
+        }
+        console.log("switched to: " + contactId);
+        setCurrentContactId(contactId);
+        const response2 = handleMessagePresentation(contactId);
+        currentContact = ContactsData.find((contact) => contact.id === currentContactId);
     }
-    let currentContact = ContactsData.find((contact) => contact.id === currentContactId);
+
 
     return (
         <>
