@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import Users from '../models/users.js';
+import Authenticator from "../controllers/authenticator.js";
 
 
 const key = 'y6SNjgPbm3X^x2jgX5nG@8dT2T!D9X';

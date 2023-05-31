@@ -1,6 +1,6 @@
 import authenticatorService from '../services/authenticator.js';
 
-export const isLoggedIn = (req, res) => {
+export const isLoggedIn = (req) => {
     // If the request has an authorization header
     if (req.headers.authorization) {
         // Extract the token from that header
@@ -11,10 +11,10 @@ export const isLoggedIn = (req, res) => {
             console.log('The logged in user is: ' + data.username);
             return data.username;
         } catch (err) {
-            return res.status(404).send('Incorrect username and/or password');
+            return false;
         }
     } else {
-        return res.status(403).send('Token required');
+        return false;
     }
 };
 
@@ -24,7 +24,7 @@ const processLogin = async (req, res) => {
 
     if (!token) {
         // Incorrect username/password. The user should try again.
-        res.status(404).send('Invalid username and/or password');
+        res.status(404).send('Incorrect username and/or password');
     } else {
         // Return the token to the browser
         res.status(200).json({token});

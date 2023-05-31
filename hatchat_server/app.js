@@ -33,6 +33,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 app.use('/api/Users',users);
-app.use('/api/Tokens' || '/api/Chats',authenticator);
+app.use('/api/Tokens',authenticator);
 
 app.listen(process.env.PORT);
