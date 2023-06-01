@@ -191,6 +191,13 @@ body {
     padding: 0;
 }
 
+.deleteChat{
+    font-size: 10px;
+    cursor: pointer;
+    float: right;
+    padding: 1px;
+}
+
 /*The chatPersonRoom*/
 
 .userName {
