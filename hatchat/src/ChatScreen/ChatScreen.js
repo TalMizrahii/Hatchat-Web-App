@@ -125,7 +125,6 @@ function ChatScreen({currentUsernameAndToken}) {
                         return -1;
                     }
                 });
-                let filteredContacts = [];
                 allChats.forEach((chat) => {
                     contact = {
                         id: chat.id,
@@ -136,17 +135,15 @@ function ChatScreen({currentUsernameAndToken}) {
                         contact.bio = chat.lastMessage.content;
                         contact.lastSeen = formatTimestamp(chat.lastMessage.created);
                     }
-                    filteredContacts.push(contact);
+                    addContact(contact);
                 });
-                setFilteredContacts(filteredContacts);
+                await handleMessagePresentation(allChats[0].id);
             }
         } catch (error) {
             // Handle the error here
             console.error('Error fetching chats:', error);
         }
     };
-
-
 
     const handleMessageToServer = async (content) => {
         // Create a data json to send to the server.
