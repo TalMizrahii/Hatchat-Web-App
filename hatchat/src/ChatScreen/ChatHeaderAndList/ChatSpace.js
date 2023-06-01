@@ -4,23 +4,27 @@ import NavIcons from "./NavIcons";
 import SearchInput from "./SearchInput";
 import ListGroupOfContacts from "./ListGroupOfContacts.";
 
-function ChatSpace({   currentUsernameAndToken,
+function ChatSpace({
+                       handleChatDelete, currentUsernameAndToken,
                        handleLogout,
                        activeUser,
                        handleSearch,
                        addContact,
                        filteredContacts,
-                       handleContactSwitch}) {
+                       handleContactSwitch
+                   }) {
 
     return (
         <>
             <div className="col-md-3 g-0 chatScreen">
                 <HeaderBox>
                     <UserImageLeftTopCorner activeUser={activeUser}/>
-                    <NavIcons handleContactSwitch={handleContactSwitch} currentUsernameAndToken={currentUsernameAndToken} handleLogout={handleLogout} filteredContacts={filteredContacts} addContact={addContact} />
+                    <NavIcons handleContactSwitch={handleContactSwitch}
+                              currentUsernameAndToken={currentUsernameAndToken} handleLogout={handleLogout}
+                              filteredContacts={filteredContacts} addContact={addContact}/>
                 </HeaderBox>
                 <SearchInput handleSearch={handleSearch}/>
-                <ListGroupOfContacts handleContactSwitch={handleContactSwitch} filteredContacts={filteredContacts}/>
+                <ListGroupOfContacts handleChatDelete={handleChatDelete} handleContactSwitch={handleContactSwitch} filteredContacts={filteredContacts}/>
             </div>
         </>
     );

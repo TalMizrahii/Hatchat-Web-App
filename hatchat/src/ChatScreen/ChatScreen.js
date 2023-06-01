@@ -5,10 +5,7 @@ import GeneralContainer from "./GeneralContainer";
 import ChatSpace from "./ChatHeaderAndList/ChatSpace";
 import ConversationSpace from "./ChatConversation/ConversationSpace";
 import {useEffect, useState} from "react";
-import ContactMsg from "../DataBase/contactMsg";
 import {useNavigate} from "react-router-dom";
-import ContactsData from "../DataBase/ContactsData";
-import {format} from "date-fns";
 
 
 const exitToLogin = (navigate) => {
@@ -18,12 +15,12 @@ const exitToLogin = (navigate) => {
 function ChatScreen({currentUsernameAndToken}) {
     const [searchContent, setSearchContent] = useState("");
     const [activeUser, setActiveUser] = useState({});
-    const [filteredContacts, setFilteredContacts] = useState(ContactsData);
+    const [filteredContacts, setFilteredContacts] = useState([]);
     const [currentFeed, setCurrentFeed] = useState([]);
     const [currentContactId, setCurrentContactId] = useState(-1);
     const navigate = useNavigate();
 
-    let currentContact = ContactsData.find((contact) => contact.id === currentContactId);
+    let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
 
 
     useEffect(() => {
@@ -69,16 +66,16 @@ function ChatScreen({currentUsernameAndToken}) {
         setFilteredContacts(null);
         setCurrentFeed([]);
         setCurrentContactId(-1);
-        ContactsData.length = 0;
+        filteredContacts.length = 0;
         exitToLogin(navigate);
     }
 
     const handleSearch = (content) => {
         setSearchContent(content);
         if (content === "") {
-            setFilteredContacts(ContactsData);
+            setFilteredContacts(filteredContacts);
         } else {
-            const filtered = ContactsData.filter((contact) =>
+            const filtered = filteredContacts.filter((contact) =>
                 contact.name.includes(content)
             );
             setFilteredContacts(filtered);
@@ -86,10 +83,10 @@ function ChatScreen({currentUsernameAndToken}) {
     };
 
     const addContact = (contact) => {
-        const existingContact = ContactsData.find((c) => c.id === contact.id);
+        const existingContact = filteredContacts.find((c) => c.id === contact.id);
         if (!existingContact) {
-            ContactsData.push(contact);
-            setFilteredContacts([...ContactsData]);
+            filteredContacts.push(contact);
+            setFilteredContacts([...filteredContacts]);
         }
         setCurrentContactId(contact.id);
     };
@@ -97,8 +94,15 @@ function ChatScreen({currentUsernameAndToken}) {
 
     const formatTimestamp = (timestamp) => {
         const date = new Date(timestamp);
-        return format(date, "MMM d 'at' hh:mm aa");
+        return date.toLocaleString("en-US", {
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true
+        });
     };
+
 
     const handleChatsFromServer = async () => {
         try {
@@ -125,14 +129,10 @@ function ChatScreen({currentUsernameAndToken}) {
                     addContact(contact);
                 });
                 const resMessages = await handleMessagePresentation(contact.id);
-
             }
         } catch (error) {
             // Handle the error here
             console.error('Error fetching chats:', error);
-            // Display an error message.
-            alert('Error fetching chats');
-            navigate('/');
         }
     };
 
@@ -217,9 +217,39 @@ function ChatScreen({currentUsernameAndToken}) {
         console.log("switched to: " + contactId);
         setCurrentContactId(contactId);
         const response2 = handleMessagePresentation(contactId);
-        currentContact = ContactsData.find((contact) => contact.id === currentContactId);
+        currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
     }
 
+
+    const handleChatDeleteFromServer = async (chatId) => {
+        const res = await fetch('http://localhost:5000/api/Chats/' + chatId, {
+            method: 'delete',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': currentUsernameAndToken.token,
+            },
+        });
+        if (res.ok) {
+            console.log("deleted successfully");
+        } else {
+            // Display an error message.
+            console.log("Error in deletion.");
+        }
+    }
+
+    const handleChatDelete = async (chatId) => {
+        await handleChatDeleteFromServer(chatId);
+        setFilteredContacts((prevFilteredContacts) => {
+            const updatedContacts = [...prevFilteredContacts];
+            const contactIndex = updatedContacts.findIndex(
+                (contact) => contact.id === chatId
+            );
+            if (contactIndex !== -1) {
+                updatedContacts.splice(contactIndex, 1);
+            }
+            return updatedContacts;
+        });
+    }
 
     return (
         <>
@@ -232,7 +262,9 @@ function ChatScreen({currentUsernameAndToken}) {
                            handleContactSwitch={handleContactSwitch}
                            handleSearch={handleSearch}
                            addContact={addContact}
-                           filteredContacts={filteredContacts}/>
+                           filteredContacts={filteredContacts}
+                           handleChatDelete={handleChatDelete}
+                />
                 {/*Contains all components about the conversation with the contacts*/}
                 <ConversationSpace currentFeed={currentFeed}
                                    activeUser={activeUser}

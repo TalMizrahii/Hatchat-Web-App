@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-function UserInList({ contact, handleContactSwitch }) {
+function UserInList({handleChatDelete, contact, handleContactSwitch }) {
     const [showButton, setShowButton] = useState(false);
     const listItemRef = useRef(null);
 
@@ -15,7 +15,7 @@ function UserInList({ contact, handleContactSwitch }) {
 
     const handleButtonClick = (e) => {
         e.stopPropagation();
-        console.log('Button clicked!');
+        handleChatDelete(contact.id);
     };
 
     useEffect(() => {
@@ -45,15 +45,14 @@ function UserInList({ contact, handleContactSwitch }) {
             <div className="user-img">
                 <img className="dp" src={contact.profilePic} alt="avatar 1" />
             </div>
-            <div className="userName">{truncatedName}</div>
-            <div className="timeAndHour">{contact.lastSeen}</div>
-            <div className="lastMsg">{contact.bio}</div>
-
             {showButton && (
                 <button type="button" className="deleteChat btn btn-outline-danger right-click-button" onClick={handleButtonClick}>
                     Delete Chat
                 </button>
             )}
+            <div className="userName">{truncatedName}</div>
+            <div className="timeAndHour">{contact.lastSeen}</div>
+            <div className="lastMsg">{contact.bio}</div>
         </li>
     );
 }

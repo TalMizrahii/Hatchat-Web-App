@@ -196,6 +196,7 @@ body {
     cursor: pointer;
     float: right;
     padding: 1px;
+    margin-left: 10px;
 }
 
 /*The chatPersonRoom*/
@@ -217,7 +218,7 @@ body {
 .lastMsg {
     float: left;
     margin-top: 10px;
-    margin-left: 30%;
+    margin-left: 20%;
     font-size: 60%;
     font-style: italic;
 }

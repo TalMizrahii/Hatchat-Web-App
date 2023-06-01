@@ -4,8 +4,6 @@ import InputMsgLowerBar from "./inputMsgLowerBar";
 import MsgScrollerGood from "./MsgScrollerGood";
 import UserSelfMsg from "./UserSelfMsg";
 import ContactResponseMsg from "./ContactResponseMsg";
-import { useState } from "react";
-import { format } from "date-fns";
 
 function ConversationSpace({ currentFeed, activeUser, handleNewMessage, currentContactId }) {
     const handleFirstNextMessage = (content) => {
@@ -17,7 +15,13 @@ function ConversationSpace({ currentFeed, activeUser, handleNewMessage, currentC
 
     const formatTimestamp = (timestamp) => {
         const date = new Date(timestamp);
-        return format(date, "MMM d 'at' hh:mm aa");
+        return date.toLocaleString("en-US", {
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true
+        });
     };
 
     if (currentContactId === -1) {
