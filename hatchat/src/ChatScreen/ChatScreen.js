@@ -8,6 +8,7 @@ import {useEffect, useState} from "react";
 import ContactMsg from "../DataBase/contactMsg";
 import {useNavigate} from "react-router-dom";
 import ContactsData from "../DataBase/ContactsData";
+import {format} from "date-fns";
 
 
 const exitToLogin = (navigate) => {
@@ -30,7 +31,6 @@ function ChatScreen({currentUsernameAndToken}) {
             try {
                 await getCurrentUser();
                 await handleChatsFromServer();
-                handleContactSwitch(currentContactId);
             } catch (error) {
                 // Handle the error here
                 console.error("Error fetching user:", error);
@@ -95,6 +95,11 @@ function ChatScreen({currentUsernameAndToken}) {
     };
 
 
+    const formatTimestamp = (timestamp) => {
+        const date = new Date(timestamp);
+        return format(date, "MMM d 'at' hh:mm aa");
+    };
+
     const handleChatsFromServer = async () => {
         try {
             const res = await fetch('http://localhost:5000/api/Chats', {
@@ -108,15 +113,19 @@ function ChatScreen({currentUsernameAndToken}) {
                 navigate('/');
             } else {
                 const allChats = await res.json();
+                let contact;
                 allChats.forEach((chat) => {
-                    const contact = {
+                    contact = {
                         id: chat.id,
                         name: chat.user.displayName,
                         profilePic: chat.user.profilePic,
+                        bio: chat.lastMessage.content,
+                        lastSeen: formatTimestamp(chat.lastMessage.created),
                     };
                     addContact(contact);
                 });
-                const resMessages = await handleMessagePresentation();
+                const resMessages = await handleMessagePresentation(contact.id);
+
             }
         } catch (error) {
             // Handle the error here
@@ -140,7 +149,6 @@ function ChatScreen({currentUsernameAndToken}) {
             },
             body: JSON.stringify(data)
         });
-
         if (res.ok) {
             const response = await res.json();
             setCurrentFeed(prevFeed => [...prevFeed, response]);
@@ -160,19 +168,52 @@ function ChatScreen({currentUsernameAndToken}) {
         if (res.ok) {
             const response = await res.json();
             setCurrentFeed(response.messages);
-            console.log("cf: " + currentFeed + "id " + contactId);
         } else {
             // Display an error message.
         }
     };
 
-    const handleNewMessage = (content) => {
-        const response = handleMessageToServer(content);
-    };
-    const handleContactSwitch = (contactId) => {
-        if (contactId === currentContactId) {
+    const updateContactInList = (content) => {
+        if(content.text === ""){
             return;
         }
+        const newMessage = {
+            text: content.text,
+            timeAndDate: content.timeAndDate,
+        };
+
+        setFilteredContacts((prevFilteredContacts) => {
+            const updatedContacts = [...prevFilteredContacts];
+            const contactIndex = updatedContacts.findIndex(
+                (contact) => contact.id === currentContactId
+            );
+            if (contactIndex !== -1) {
+                updatedContacts[contactIndex] = {
+                    ...updatedContacts[contactIndex],
+                    bio: newMessage.text.slice(0, 22),
+                    lastSeen: newMessage.timeAndDate,
+                };
+                updatedContacts.unshift(updatedContacts.splice(contactIndex, 1)[0]);
+            }
+            return updatedContacts;
+        });
+    }
+
+    const handleNewMessage = (content) => {
+        const newMessage = {
+            text: content.text,
+            timeAndDate: content.timeAndDate,
+        };
+
+        const response = handleMessageToServer(content);
+        // Update the bio and lastSeen of the current contact
+        updateContactInList(content);
+    };
+
+    const handleContactSwitch = (contactId) => {
+        // if (contactId === currentContactId) {
+        //     return;
+        // }
         console.log("switched to: " + contactId);
         setCurrentContactId(contactId);
         const response2 = handleMessagePresentation(contactId);

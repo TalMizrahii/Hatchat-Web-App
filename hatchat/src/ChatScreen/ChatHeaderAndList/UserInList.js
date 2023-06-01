@@ -17,4 +17,5 @@ function UserInList({ contact, handleContactSwitch }) {
     );
 }
 
+
 export default UserInList;
