@@ -78,6 +78,15 @@
         await console.log(res);
     }
 
+    const getChatById = async () => {
+        const res = await fetch(`http://localhost:12345/api/Chats${document.getElementsByTagName("input")[0].value}`, {
+            'method': 'get',
+            'headers': {
+                'Content-Type': 'application/json',
+                'Authorization': document.getElementsByTagName("input")[4].value
+            }
+        })
+    }
 
 </script>
 
@@ -114,7 +123,7 @@
 <input type="text" placeholder="ID">
 <br>
 <br>
-<button onclick="">Get Chat by ID</button>
+<button onclick="getChatById()">Get Chat by ID</button>
 <br>
 </body>
 </html>

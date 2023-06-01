@@ -115,7 +115,73 @@ const getAllChats = async (username) => {
         return false;
     }
 };
+const chatValidation = async (username1, username2, connectedUsername) => {
+    return username1 === connectedUsername || username2 === connectedUsername;
+
+}
 
 
+const getChatByID = async (username, id) => {
+    try {
+        const chat = await Chat.findOne({"_id": id});
+        if (!chat) {
+            return false;
+        } else {
+            if (!await chatValidation(chat.users[0], chat.users[1], username)) {
+                return false;
+            }
+            const users = [];
+            const messages = [];
+            for (const specificUser of chat.users) {
+                const user = await User.findOne({"_id": specificUser});
+                users.push({
+                    "username": user.username,
+                    "displayName": user.displayName,
+                    "profilePic": user.profilePic
+                });
+            }
+            for (const msg of chat.messages) {
+                const message = await Message.findOne({"_id": msg});
+                const sender = await User.findOne(message.senderUser);
+                messages.push({
+                    "id": message.id,
+                    "created": message.created,
+                    "sender": {
+                        "username": sender.username,
+                        "displayName": sender.displayName,
+                        "profilePic": sender.profilePic
+                    },
+                    "content": message.content
+                });
+            }
+            return {
+                "id": id,
+                "users": users,
+                "messages": messages
+            };
 
-export default {addNewChat, getAllChats};
+        }
+    } catch (error) {
+        console.error("Error fetching chat:", error);
+        return false;
+    }
+};
+
+const deleteChatByID = async (username, id) => {
+    try {
+        const chat = Chat.findOne({"id": id});
+        if (!chat) {
+            return false;
+        }
+        if (!await chatValidation(chat.users[0], chat.users[1], username)) {
+            return false;
+        }
+        return Chat.deleteOne({id})
+    } catch (error) {
+        console.error("Error fetching chat:", error);
+        return false;
+    }
+};
+
+
+export default {addNewChat, getAllChats, getChatByID, deleteChatByID};

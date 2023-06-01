@@ -14,7 +14,6 @@ const messageSchema = new Schema({
     senderUser: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        select: 'username displayName profilePic',
         required: true
     },
     content: {

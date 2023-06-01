@@ -9,6 +9,8 @@ router.route('/')
     .post(chatController.addNewChat)
     .get(chatController.getAllChats);
 
-
+router.route('/:id')
+    .get(chatController.getChatByID)
+    .delete(chatController.deleteChatByID);
 
 export default router;

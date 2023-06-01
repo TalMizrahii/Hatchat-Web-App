@@ -23,10 +23,10 @@ const processLogin = async (req, res) => {
     const token = await authenticatorService.generateToken(req.body.username, req.body.password);
     if (!token) {
         // Incorrect username/password. The user should try again.
-        res.status(404).send('Incorrect username and/or password');
+        return res.status(404).send('Incorrect username and/or password');
     } else {
         // Return the token to the browser
-        res.send(token);
+        return res.send(token);
     }
 };
 
