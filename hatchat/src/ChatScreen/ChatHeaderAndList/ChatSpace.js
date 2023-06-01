@@ -20,11 +20,17 @@ function ChatSpace({
                 <HeaderBox>
                     <UserImageLeftTopCorner activeUser={activeUser}/>
                     <NavIcons handleContactSwitch={handleContactSwitch}
-                              currentUsernameAndToken={currentUsernameAndToken} handleLogout={handleLogout}
-                              filteredContacts={filteredContacts} addContact={addContact}/>
+                              currentUsernameAndToken={currentUsernameAndToken}
+                              handleLogout={handleLogout}
+                              filteredContacts={filteredContacts}
+                              addContact={addContact}
+                              activeUser={activeUser}
+                    />
                 </HeaderBox>
                 <SearchInput handleSearch={handleSearch}/>
-                <ListGroupOfContacts handleChatDelete={handleChatDelete} handleContactSwitch={handleContactSwitch} filteredContacts={filteredContacts}/>
+                <ListGroupOfContacts handleChatDelete={handleChatDelete}
+                                     handleContactSwitch={handleContactSwitch}
+                                     filteredContacts={filteredContacts}/>
             </div>
         </>
     );

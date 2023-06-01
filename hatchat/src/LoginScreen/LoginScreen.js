@@ -42,6 +42,8 @@ function LoginScreen({setCurrentUsernameAndToken}) {
                 username: username,
                 token: tokenStatement,
             })
+
+
             // Navigate to the home page.
             navigate('/chat');
         }

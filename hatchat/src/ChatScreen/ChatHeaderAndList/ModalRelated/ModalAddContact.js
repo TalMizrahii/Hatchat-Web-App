@@ -4,7 +4,7 @@ import AddContactBtn from "./AddContactBtn";
 import CloseModalBtn from "./CloseModalBtn";
 import ModalTitle from "./ModalTitle";
 
-function ModalAddContact({handleContactSwitch, currentUsernameAndToken, addContact, filteredContacts}) {
+function ModalAddContact({activeUser, handleContactSwitch, currentUsernameAndToken, addContact, filteredContacts}) {
 
     const [contactData, setContactData] = useState({
         id: null,
@@ -37,7 +37,10 @@ function ModalAddContact({handleContactSwitch, currentUsernameAndToken, addConta
         const data = {
             "username": contactData.name
         };
-
+        if(contactData.name === activeUser.username){
+            alert("You can't add yourself");
+            return;
+        }
         if (!validateIsInList(contactData.name)) {
             return;
         }
@@ -54,11 +57,7 @@ function ModalAddContact({handleContactSwitch, currentUsernameAndToken, addConta
         try {
             response = await res.json();
         } catch (error) {
-            if (error instanceof SyntaxError) {
-                alert(error);
-            } else {
-                alert(error);
-            }
+            alert("Error during adding");
             return;
         }
         if (res.ok) {
@@ -78,7 +77,7 @@ function ModalAddContact({handleContactSwitch, currentUsernameAndToken, addConta
             addContact(newContact);
             handleContactSwitch(newContact.id)
         } else {
-            alert("Error during adding");
+            alert("No such user");
         }
     }
 

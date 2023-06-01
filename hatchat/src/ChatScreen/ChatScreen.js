@@ -36,7 +36,7 @@ function ChatScreen({currentUsernameAndToken}) {
                 navigate('/');
             }
         };
-        fetchData(); // Call the fetchData function
+        const res = fetchData(); // Call the fetchData function
         // Add missing dependencies to the dependency array
     }, [navigate, currentUsernameAndToken]);
 
@@ -174,7 +174,7 @@ function ChatScreen({currentUsernameAndToken}) {
     };
 
     const updateContactInList = (content) => {
-        if(content.text === ""){
+        if (content.text === "") {
             return;
         }
         const newMessage = {
@@ -211,10 +211,6 @@ function ChatScreen({currentUsernameAndToken}) {
     };
 
     const handleContactSwitch = (contactId) => {
-        // if (contactId === currentContactId) {
-        //     return;
-        // }
-        console.log("switched to: " + contactId);
         setCurrentContactId(contactId);
         const response2 = handleMessagePresentation(contactId);
         currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
