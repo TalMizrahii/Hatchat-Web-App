@@ -119,10 +119,15 @@ function ChatScreen({currentUsernameAndToken}) {
                 const allChats = await res.json();
                 let contact;
                 allChats.sort((a, b) => {
-                    if (a.lastMessage.created < b.lastMessage.created) {
+                    // Compare the timestamps, handling empty or null values
+                    const timestampA = a.lastMessage ? a.lastMessage.created : '';
+                    const timestampB = b.lastMessage ? b.lastMessage.created : '';
+                    if (timestampA < timestampB) {
                         return 1;
-                    } else {
+                    } else if (timestampA > timestampB) {
                         return -1;
+                    } else {
+                        return 0;
                     }
                 });
                 allChats.forEach((chat) => {
@@ -144,6 +149,7 @@ function ChatScreen({currentUsernameAndToken}) {
             console.error('Error fetching chats:', error);
         }
     };
+
 
     const handleMessageToServer = async (content) => {
         // Create a data json to send to the server.
@@ -223,7 +229,6 @@ function ChatScreen({currentUsernameAndToken}) {
         const response2 = handleMessagePresentation(contactId);
         currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
     }
-
 
     const handleChatDeleteFromServer = async (chatId) => {
         const res = await fetch('http://localhost:5000/api/Chats/' + chatId, {

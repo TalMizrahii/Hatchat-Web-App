@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 
-function UserInList({handleChatDelete, contact, handleContactSwitch }) {
+function UserInList({handleChatDelete, contact, handleContactSwitch}) {
     const [showButton, setShowButton] = useState(false);
     const listItemRef = useRef(null);
 
@@ -32,8 +32,13 @@ function UserInList({handleChatDelete, contact, handleContactSwitch }) {
         };
     }, []);
 
-    const truncatedName =
-        contact.name.length > 12 ? contact.name.substring(0, 12) + '...' : contact.name;
+    const truncatedName = contact.name.length > 10 ? contact.name.substring(0, 10) + '...' : contact.name;
+
+    let truncatedBio = "";
+    if (contact.bio !== null && contact.bio !== undefined && contact.bio !== "") {
+        truncatedBio = contact.bio.length > 8 ? contact.bio.substring(0, 8) + '...' : contact.bio;
+    }
+
 
     return (
         <li
@@ -43,16 +48,17 @@ function UserInList({handleChatDelete, contact, handleContactSwitch }) {
             ref={listItemRef}
         >
             <div className="user-img">
-                <img className="dp" src={contact.profilePic} alt="avatar 1" />
+                <img className="dp" src={contact.profilePic} alt="avatar 1"/>
             </div>
             {showButton && (
-                <button type="button" className="deleteChat btn btn-outline-danger right-click-button" onClick={handleButtonClick}>
+                <button type="button" className="deleteChat btn btn-outline-danger right-click-button"
+                        onClick={handleButtonClick}>
                     Delete Chat
                 </button>
             )}
             <div className="userName">{truncatedName}</div>
             <div className="timeAndHour">{contact.lastSeen}</div>
-            <div className="lastMsg">{contact.bio}</div>
+            <div className="lastMsg">{truncatedBio}</div>
         </li>
     );
 }

@@ -210,15 +210,17 @@ body {
 }
 
 .timeAndHour {
+    margin-top: 0;
+    margin-left: 0;
     margin-right: 0;
     font-size: 70%;
     float: right;
 }
 
 .lastMsg {
-    float: left;
-    margin-top: 10px;
-    margin-left: 20%;
+    float: right;
+    margin-top: 8%;
+    /*padding-left: 10%;*/
     font-size: 60%;
     font-style: italic;
 }
