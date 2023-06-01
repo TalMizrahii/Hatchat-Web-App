@@ -2,10 +2,10 @@ import userService from '../services/users.js'
 import authenticatorService from "../services/authenticator.js";
 
 const addNewUser = async (req, res) => {
-    res.json(await userService.addNewUser(req.body.username, req.body.password, req.body.displayName, req.body.profilePic));
+    res.send(await userService.addNewUser(req.body.username, req.body.password, req.body.displayName, req.body.profilePic));
 };
 
-const getUserByUserName = async (req, res) => {
+const getUserByUsername = async (req, res) => {
     if (req.headers.authorization) {
         // Extract the token from that header
         const token = req.headers.authorization.split(' ')[1];
@@ -13,9 +13,9 @@ const getUserByUserName = async (req, res) => {
         try {
            if (data){
                console.log('The logged in user is: ' + data.username);
-               const user = await userService.getUserByUserName(token.username);
+               const user = await userService.getUserByUsername(token.username);
                if (user){
-                   res.json(user);
+                   res.send(user);
                }else{
                    return res.status(401).json({errors: ['Unauthorized']});
                }
@@ -30,4 +30,4 @@ const getUserByUserName = async (req, res) => {
 
 
 
-export default {addNewUser, getUserByUserName};
+export default {addNewUser, getUserByUserName: getUserByUsername};

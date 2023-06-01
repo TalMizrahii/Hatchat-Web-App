@@ -22,8 +22,6 @@
         )
         await console.log(res);
     }
-
-
     const login = async () => {
         const data = {
             username: document.getElementsByTagName("input")[0].value,
@@ -39,7 +37,48 @@
             }
         )
         await console.log(res);
+        document.getElementsByTagName("input")[4].value = "Bearer " + await res.text();
     }
+    const getUser = async () => {
+        const res = await fetch(`http://localhost:12345/api/Users/${document.getElementsByTagName("input")[0].value}`, {
+            'method': 'get',
+            'headers': {
+                'Content-Type': 'application/json',
+                'Authorization': document.getElementsByTagName("input")[4].value
+            }
+        })
+        await console.log(res);
+    }
+
+    const postChat  = async () => {
+        const data = {
+            username: document.getElementsByTagName("input")[0].value
+        }
+        const res = await fetch('http://localhost:12345/api/Chats', {
+                'method': 'post',
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Authorization': document.getElementsByTagName("input")[4].value
+                },
+                'body': JSON.stringify(data)
+            }
+        )
+        await console.log(res);
+    }
+
+
+    const getChats  = async () => {
+        const res = await fetch(`http://localhost:12345/api/Chats`, {
+            'method': 'get',
+            'headers': {
+                'Content-Type': 'application/json',
+                'Authorization': document.getElementsByTagName("input")[4].value
+            }
+        })
+        await console.log(res);
+    }
+
+
 </script>
 
 
@@ -56,7 +95,26 @@
 <input type="text" placeholder="Profile Pic">
 <br>
 <br>
+<input type="text" placeholder="Token">
+<br>
+<br>
 <button onclick="regi()">Register</button>
+
 <button onclick="login()">Login</button>
+
+<button onclick="getUser()">Get User</button>
+<br>
+<br>
+<button onclick="postChat()">Post Chat</button>
+<br>
+<br>
+<button onclick="getChats()">Get Chats</button>
+<br>
+<br>
+<input type="text" placeholder="ID">
+<br>
+<br>
+<button onclick="">Get Chat by ID</button>
+<br>
 </body>
 </html>

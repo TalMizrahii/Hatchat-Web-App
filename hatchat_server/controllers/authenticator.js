@@ -21,13 +21,12 @@ export const isLoggedIn = (req) => {
 const processLogin = async (req, res) => {
     // Check credentials
     const token = await authenticatorService.generateToken(req.body.username, req.body.password);
-
     if (!token) {
         // Incorrect username/password. The user should try again.
         res.status(404).send('Incorrect username and/or password');
     } else {
         // Return the token to the browser
-        res.status(200).json({token});
+        res.send(token);
     }
 };
 

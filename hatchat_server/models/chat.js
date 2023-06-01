@@ -12,7 +12,6 @@ const chatSchema = new Schema({
         {
             type: Schema.Types.ObjectId,
             ref: 'User',
-            select: 'username displayName profilePic',
         },
     ],
     messages: [
@@ -23,22 +22,7 @@ const chatSchema = new Schema({
     ],
 });
 
-chatSchema.pre('save', function (next) {
-    if (!this.isNew) {
-        // Only generate a new ID for new chats
-        return next();
-    }
 
-    this.constructor.findOne({}, {}, { sort: { id: -1 } }, (err, lastChat) => {
-        if (err) {
-            return next(err);
-        }
-
-        this.id = lastChat ? lastChat.id + 1 : 1;
-
-        next();
-    });
-});
 
 
 

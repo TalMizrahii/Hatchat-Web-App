@@ -1,41 +1,121 @@
 import Chat from "../models/chat.js";
 import User from "../models/users.js";
+import Message from "../models/message.js";
 
-const addNewChat = async (username) => {
+const addNewChat = async (username, connectedUsername) => {
     try {
-        // Find the user by username and select specific fields
-        const user = await User.findOne({ username }, 'username displayName profilePic');
+        if (username !== connectedUsername) {
+            // Find the user by username and select specific fields
+            const user = await User.findOne({"username": username}).populate('username displayName profilePic');
+            const saveUser = await User.findOne({"username": username})
+            const connectedUser = await User.findOne({"username": connectedUsername});
+            // User not found
+            if (!user || !connectedUser) {
+                return false;
+            }
+            const maxChatID = await Chat.findOne().sort('-id').limit(1).exec();
+            let chatID = 1;
+            if (maxChatID && maxChatID.id) {
+                chatID = maxChatID.id + 1;
+            }
+            const newChat = await new Chat({
+                "id": chatID,
+                "users": [saveUser, connectedUser],
+                "messages": []
+            });
 
-        // User not found
-        if (!user) {
-            return false;
-        }
 
-        // Create a new chat with the found user
-        const newChat = new Chat({
-            users: [user]
-        });
+            // Save the new chat
+            const savedChat = await newChat.save();
 
-        // Save the new chat
-        const savedChat = await newChat.save();
-
-        if (savedChat) {
-            // Construct the desired response object
-            return {
-                id: savedChat.id,
-                user: {
-                    username: user.username,
-                    displayName: user.displayName,
-                    profilePic: user.profilePic
-                }
-            };
+            if (savedChat) {
+                // Construct the desired response object
+                return {
+                    "id": savedChat.id,
+                    "user": {
+                        "username": user.username,
+                        "displayName": user.displayName,
+                        "profilePic": user.profilePic
+                    }
+                };
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
+
     } catch (error) {
         console.error(error);
         return false;
     }
 };
+const getAllChats = async (username) => {
+    try {
+        const jsonArray = [];
+        const chats = await Chat.find();
 
-export default { addNewChat };
+        if (chats === null) {
+            return jsonArray;
+        } else {
+            for (const chat of chats) {
+                const user1 = await User
+                    .findOne({"_id": chat.users[0]})
+                    .populate("username displayName profilePic")
+                    .lean();
+                const user2 = await User
+                    .findOne({"_id": chat.users[1]})
+                    .populate("username displayName profilePic")
+                    .lean();
+
+                if (user1.username === username || user2.username === username) {
+                    let lastMessage = null;
+
+                    if (chat.messages.length > 0) {
+                        const message = await Message.findOne({
+                            _id: chat.messages[chat.messages.length - 1]
+                        })
+                            .populate("id created content")
+                            .lean();
+
+                        lastMessage = {
+                            id: message.id,
+                            created: message.created,
+                            content: message.content
+                        };
+                    }
+
+                    let otherUser;
+                    if (user1.username === username) {
+                        otherUser = {
+                            username: user2.username,
+                            displayName: user2.displayName,
+                            profilePic: user2.profilePic
+                        };
+                    } else {
+                        otherUser = {
+                            username: user1.username,
+                            displayName: user1.displayName,
+                            profilePic: user1.profilePic
+                        };
+                    }
+
+                    const jsonObject = {
+                        id: chat.id,
+                        user: otherUser,
+                        lastMessage: lastMessage
+                    };
+                    jsonArray.push(jsonObject);
+                }
+            }
+        }
+        return jsonArray;
+    } catch (error) {
+        console.error("Error fetching chats:", error);
+        return false;
+    }
+};
+
+
+
+export default {addNewChat, getAllChats};

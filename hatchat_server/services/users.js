@@ -36,16 +36,16 @@ const addNewUser = async (username, password, displayName, profilePic) => {
 };
 
 
-const getUserByUserName = async (id) => {
+const getUserByUsername = async (id) => {
 
-    const user = await Users.findById(id, 'userName displayName profilePic');
+    const user = await Users.findOne(id).populate( 'username displayName profilePic');
     if (!user) {
         console.error('User not found');
         return false;
     }
-    const {userName, displayName, profilePic} = user;
+    const {username,displayName, profilePic} = user;
     return {
-        userName,
+        username,
         displayName,
         profilePic
     };
@@ -53,4 +53,4 @@ const getUserByUserName = async (id) => {
 };
 
 
-export default {addNewUser, getUserByUserName};
+export default {addNewUser,  getUserByUsername};

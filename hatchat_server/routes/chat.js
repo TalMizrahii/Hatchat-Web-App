@@ -1,11 +1,13 @@
 import { Router } from 'express';
-import chatController from '../controllers/users.js';
+import chatController from '../controllers/chat.js';
+import {get} from "mongoose";
 
 
 const router = Router();
 
 router.route('/')
-    .post(chatController.addNewUser);
+    .post(chatController.addNewChat)
+    .get(chatController.getAllChats);
 
 
 
