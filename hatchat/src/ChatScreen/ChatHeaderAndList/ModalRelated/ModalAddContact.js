@@ -57,7 +57,7 @@ function ModalAddContact({activeUser, handleContactSwitch, currentUsernameAndTok
         try {
             response = await res.json();
         } catch (error) {
-            alert("Error during adding");
+            alert("No such user");
             return;
         }
         if (res.ok) {

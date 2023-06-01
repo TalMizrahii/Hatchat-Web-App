@@ -118,23 +118,34 @@ function ChatScreen({currentUsernameAndToken}) {
             } else {
                 const allChats = await res.json();
                 let contact;
+                allChats.sort((a, b) => {
+                    if (a.lastMessage.created < b.lastMessage.created) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                });
+                let filteredContacts = [];
                 allChats.forEach((chat) => {
                     contact = {
                         id: chat.id,
                         name: chat.user.displayName,
                         profilePic: chat.user.profilePic,
-                        bio: chat.lastMessage.content,
-                        lastSeen: formatTimestamp(chat.lastMessage.created),
                     };
-                    addContact(contact);
+                    if (chat.lastMessage) {
+                        contact.bio = chat.lastMessage.content;
+                        contact.lastSeen = formatTimestamp(chat.lastMessage.created);
+                    }
+                    filteredContacts.push(contact);
                 });
-                const resMessages = await handleMessagePresentation(contact.id);
+                setFilteredContacts(filteredContacts);
             }
         } catch (error) {
             // Handle the error here
             console.error('Error fetching chats:', error);
         }
     };
+
 
 
     const handleMessageToServer = async (content) => {
