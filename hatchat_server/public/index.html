@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Simple HTML Page</title>
+    <title>Advanced Programming 2 - Testing Page</title>
 </head>
 <script>
     const regi = async () => {
@@ -47,10 +47,10 @@
                 'Authorization': document.getElementsByTagName("input")[4].value
             }
         })
-        await console.log(res);
+        return await res.text();
     }
 
-    const postChat  = async () => {
+    const postChat = async () => {
         const data = {
             username: document.getElementsByTagName("input")[0].value
         }
@@ -63,11 +63,46 @@
                 'body': JSON.stringify(data)
             }
         )
-        await console.log(res);
+    }
+
+    const sendMessage = async () => {
+        const data = {
+            msg: document.getElementsByTagName("input")[5].value
+        }
+        const res = await fetch(`http://localhost:12345/api/Chats/${document.getElementsByTagName("input")[6].value}/Messages`, {
+            'method': 'post',
+            'headers': {
+                'Content-Type': 'application/json',
+                'Authorization': document.getElementsByTagName("input")[4].value
+            },
+
+            'body': JSON.stringify(data)
+
+        })
+        if (res.ok) {
+            return res.text();
+        }
+        return false;
     }
 
 
-    const getChats  = async () => {
+    const getMessage = async () => {
+        const res =
+            await fetch(`http://localhost:12345/api/Chats/${document.getElementsByTagName("input")[6].value}/Messages`, {
+                'method': 'get',
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Authorization': document.getElementsByTagName("input")[4].value
+                }
+            })
+        if (res.ok) {
+            return res.text();
+        }
+        return false;
+    }
+
+
+    const getChats = async () => {
         const res = await fetch(`http://localhost:12345/api/Chats`, {
             'method': 'get',
             'headers': {
@@ -75,17 +110,39 @@
                 'Authorization': document.getElementsByTagName("input")[4].value
             }
         })
-        await console.log(res);
+        //await console.log(res);
     }
 
-    const getChatById = async () => {
-        const res = await fetch(`http://localhost:12345/api/Chats${document.getElementsByTagName("input")[0].value}`, {
+
+    const getChatsByID = async () => {
+        const res = await fetch(`http://localhost:12345/api/Chats/${document.getElementsByTagName("input")[7].value}`, {
             'method': 'get',
             'headers': {
                 'Content-Type': 'application/json',
                 'Authorization': document.getElementsByTagName("input")[4].value
             }
         })
+        if (res.ok) {
+            return res.text();
+        }
+        return false;
+    }
+
+    const deleteChatByID = async () => {
+        const res = await fetch(`http://localhost:12345/api/Chats/${document.getElementsByTagName("input")[7].value}`, {
+            'method': 'delete',
+            'headers': {
+                'Content-Type': 'application/json',
+                'Authorization': document.getElementsByTagName("input")[4].value
+            }
+        })
+        if(res.status(204)) {
+            return "NO CONTENT";
+        }
+        if (res.ok) {
+            return "DELETED";
+        }
+        return false;
     }
 
 </script>
@@ -108,22 +165,23 @@
 <br>
 <br>
 <button onclick="regi()">Register</button>
-
 <button onclick="login()">Login</button>
-
 <button onclick="getUser()">Get User</button>
 <br>
 <br>
 <button onclick="postChat()">Post Chat</button>
-<br>
-<br>
 <button onclick="getChats()">Get Chats</button>
 <br>
 <br>
+<input type="text" placeholder="Message">
 <input type="text" placeholder="ID">
+<button onclick="getMessage()">Get Message</button>
+<button onclick="sendMessage()">Send Message</button>
 <br>
 <br>
-<button onclick="getChatById()">Get Chat by ID</button>
+<input type="text" placeholder="ID">
+<button onclick="getChatsByID()">Get Chat by ID</button>
+<button onclick="deleteChatByID()">Delete Chat by ID</button>
 <br>
 </body>
 </html>

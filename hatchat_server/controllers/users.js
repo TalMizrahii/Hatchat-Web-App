@@ -9,7 +9,7 @@ const getUserByUsername = async (req, res) => {
     if (req.headers.authorization) {
         // Extract the token from that header
         const token = req.headers.authorization.split(' ')[1];
-        const data = authenticatorService.verifyToken(token);
+        const data = await authenticatorService.verifyToken(token);
         try {
            if (data){
                console.log('The logged in user is: ' + data.username);

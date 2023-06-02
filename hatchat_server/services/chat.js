@@ -19,9 +19,9 @@ const addNewChat = async (username, connectedUsername) => {
                 chatID = maxChatID.id + 1;
             }
             const newChat = await new Chat({
-                "id": chatID,
-                "users": [saveUser, connectedUser],
-                "messages": []
+                id: chatID,
+                users: [saveUser, connectedUser],
+                messages: []
             });
 
 
@@ -123,11 +123,15 @@ const chatValidation = async (username1, username2, connectedUsername) => {
 
 const getChatByID = async (username, id) => {
     try {
-        const chat = await Chat.findOne({"_id": id});
+        const chat = await Chat.findOne({"id": id}).lean();
+        await console.log(chat);
         if (!chat) {
             return false;
         } else {
-            if (!await chatValidation(chat.users[0], chat.users[1], username)) {
+            const user0 =await User.findOne({"_id":chat.users[0]}).lean();
+            const user1 =await User.findOne({"_id":chat.users[1]}).lean();
+
+            if (!await chatValidation(await user0.username, await user1.username, username)) {
                 return false;
             }
             const users = [];
@@ -169,11 +173,14 @@ const getChatByID = async (username, id) => {
 
 const deleteChatByID = async (username, id) => {
     try {
-        const chat = Chat.findOne({"id": id});
+        const chat = await Chat.findOne({"id": id}).lean();
+        await console.log(chat);
         if (!chat) {
             return false;
         }
-        if (!await chatValidation(chat.users[0], chat.users[1], username)) {
+        const user0 =await User.findOne({"_id":chat.users[0]}).lean();
+        const user1 =await User.findOne({"_id":chat.users[1]}).lean();
+        if (!await chatValidation(await user0.username, await user1.username, username)) {
             return false;
         }
         return Chat.deleteOne({id})

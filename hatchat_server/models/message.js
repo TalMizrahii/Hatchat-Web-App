@@ -13,7 +13,7 @@ const messageSchema = new Schema({
     },
     senderUser: {
         type: Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Users',
         required: true
     },
     content: {

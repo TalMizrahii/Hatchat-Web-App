@@ -6,10 +6,12 @@ import chatService from "./chat.js"
 
 const addMessage = async (id, content, connectUsername) => {
 
-    const chat = await Chat.findOne({"id": id});
+    const chat = await Chat.findOne({"id": id}).lean();
 
     if (chat) {
-        if (!await chatService.chatValidation(chat.users[0], chat.users[1], connectUsername)) {
+        const user0 =await User.findOne({"_id":chat.users[0]}).lean();
+        const user1 =await User.findOne({"_id":chat.users[1]}).lean();
+        if (!await chatService.chatValidation(await user0.username, await user1.username, connectUsername)) {
             return false;
         }
         const sender = await User.findOne({"username": connectUsername})
@@ -48,7 +50,9 @@ const getMessages = async (id, connectUsername) => {
     const chatArray = []
     const chat = await Chat.findOne({"id": id});
     if (chat) {
-        if (await chatService.chatValidation(chat.users[0], chat.users[1], connectUsername)) {
+        const user0 =await User.findOne({"_id":chat.users[0]}).lean();
+        const user1 =await User.findOne({"_id":chat.users[1]}).lean();
+        if (await chatService.chatValidation(await user0.username, await user1.username, connectUsername)) {
             return false;
         }
         for (const msg of chat.messages) {
