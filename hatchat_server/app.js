@@ -4,7 +4,8 @@ import cors from 'cors'
 import mongoose from "mongoose";
 import users from './routes/users.js'
 import authenticator from './routes/authenticator.js'
-import chat from "./routes/chat.js";
+import chat from './routes/chat.js';
+import message from './routes/message.js';
 import customEnv from 'custom-env';
 
 
@@ -35,6 +36,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 app.use('/api/Users',users);
 app.use('/api/Tokens',authenticator);
+app.use('/api/Chats/:id/messages', message);
 app.use('/api/Chats',chat);
 
 

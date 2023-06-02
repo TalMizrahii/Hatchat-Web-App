@@ -1,6 +1,5 @@
 import ChatServices from "../services/chat.js";
 import authenticatorService from "../services/authenticator.js";
-import {json} from "express";
 
 
 const addNewChat = async (req, res) => {

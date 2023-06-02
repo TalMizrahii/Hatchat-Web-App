@@ -184,4 +184,4 @@ const deleteChatByID = async (username, id) => {
 };
 
 
-export default {addNewChat, getAllChats, getChatByID, deleteChatByID};
+export default {addNewChat, getAllChats, getChatByID, deleteChatByID, chatValidation};
