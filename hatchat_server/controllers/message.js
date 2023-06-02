@@ -47,4 +47,5 @@ const getMessage = async (req, res) => {
     }
 }
 
+
 export default {addMessage, getMessage}
