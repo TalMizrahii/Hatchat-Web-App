@@ -9,7 +9,9 @@ const addMessage = async (req, res) => {
         try {
             if (data) {
                 console.log('The logged in user is: ' + data.username);
-                const message = await MessageService.addMessage(req.body.id, req.body.content, data.username);
+                console.log(req.body.msg);
+                console.log(req.params.id);
+                const message = await MessageService.addMessage(req.params.id, req.body.msg, data.username);
                 if (message) {
                     return res.send(message);
                 } else {
@@ -17,6 +19,7 @@ const addMessage = async (req, res) => {
                 }
             }
         } catch (err) {
+            console.log(err);
             return res.status(401).json({errors: ['Unauthorized']});
         }
     } else {
@@ -32,7 +35,7 @@ const getMessage = async (req, res) => {
         try {
             if (data) {
                 console.log('The logged in user is: ' + data.username);
-                const message = await MessageService.getMessages(req.body.id, data.username);
+                const message = await MessageService.getMessages(req.params.id, data.username);
                 if (message) {
                     return res.send(message);
                 } else {

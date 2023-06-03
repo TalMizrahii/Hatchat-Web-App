@@ -60,7 +60,7 @@ const getChatByID = async (req, res) => {
                 if (chat) {
                     return  res.send(chat);
                 } else {
-                    return res.status(401).json({errors: ['Unauthorized']});
+                    return res.status(401).json({errors: ['Chat not Found']});
                 }
             }
         } catch (err) {

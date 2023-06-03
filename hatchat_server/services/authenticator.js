@@ -14,7 +14,7 @@ const generateToken = async (username, password) => {
         if (user.username === username && user.password === password) {
             const data = {username};
             // Generate the token and return the token
-            return jwt.sign(data, key);
+            return  jwt.sign(data, key);
         } else {
             // Invalid username/password
             return false;
@@ -26,11 +26,12 @@ const generateToken = async (username, password) => {
 };
 
 
-const verifyToken = (token) => {
+const verifyToken =  (token) => {
     try {
-        return jwt.verify(token, key);
+        return  jwt.verify(token, key);
     } catch (err) {
-        throw new Error('Invalid Token');
+        console.error(err);
+        return false;
     }
 };
 

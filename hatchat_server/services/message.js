@@ -5,71 +5,82 @@ import chatService from "./chat.js"
 
 
 const addMessage = async (id, content, connectUsername) => {
+    try {
+        const chat = await Chat.findOne({"id": id});
 
-    const chat = await Chat.findOne({"id": id}).lean();
+        if (chat) {
+            const user0 = await User.findOne({"_id": chat.users[0]}).lean();
+            const user1 = await User.findOne({"_id": chat.users[1]}).lean();
+            if (!await chatService.chatValidation(await user0.username, await user1.username, connectUsername)) {
+                return false;
+            }
+            const sender = await User.findOne({"username": connectUsername})
+            const maxMessageID = await Message.findOne().sort('-id').limit(1).exec();
+            let messageID = 1;
+            if (maxMessageID && maxMessageID.senderMessageCount) {
+                messageID = maxMessageID.senderMessageCount + 1;
+            }
+            const newMessage = await new Message({
+                "senderMessageCount": messageID,
+                "sender": sender,
+                "content": content
+            });
 
-    if (chat) {
-        const user0 =await User.findOne({"_id":chat.users[0]}).lean();
-        const user1 =await User.findOne({"_id":chat.users[1]}).lean();
-        if (!await chatService.chatValidation(await user0.username, await user1.username, connectUsername)) {
-            return false;
+            const returnVal = {
+                "id": messageID,
+                "created": new Date(),
+                "senderUser": {
+                    "username": sender.username,
+                    "displayName": sender.displayName,
+                    "profilePic": sender.profilePic
+                },
+                "content": content
+            }
+
+            await newMessage.save();
+            chat.messages.push(newMessage);
+            await chat.save();
+            return returnVal;
         }
-        const sender = await User.findOne({"username": connectUsername})
-        const maxMessageID = await Message.findOne().sort('-id').limit(1).exec();
-        let messageID = 1;
-        if (maxMessageID && maxMessageID.id) {
-            messageID = maxMessageID.id + 1;
-        }
-        const newMessage = await new Message({
-            "id": messageID,
-            "sender": sender,
-            "content": content
-        });
-
-        const returnVal = {
-            "id": messageID,
-            "created": new Date(),
-            "sender": {
-                "username": sender.username,
-                "displayName": sender.displayName,
-                "profilePic": sender.profilePic
-            },
-            "content": content
-        }
-
-        await newMessage.save();
-        await newMessage.save();
-        chat.messages.push(newMessage);
-        await chat.save();
-        return returnVal;
+        return false;
+    } catch (err) {
+        console.log(err);
+        return false;
     }
-    return false;
+
+
 };
 
 const getMessages = async (id, connectUsername) => {
-    const chatArray = []
-    const chat = await Chat.findOne({"id": id});
-    if (chat) {
-        const user0 =await User.findOne({"_id":chat.users[0]}).lean();
-        const user1 =await User.findOne({"_id":chat.users[1]}).lean();
-        if (await chatService.chatValidation(await user0.username, await user1.username, connectUsername)) {
-            return false;
+    try{
+        const chatArray = []
+        const chat = await Chat.findOne({"id": id});
+        if (chat) {
+            const user0 = await User.findOne({"_id": chat.users[0]}).lean();
+            const user1 = await User.findOne({"_id": chat.users[1]}).lean();
+            if (!await chatService.chatValidation(await user0.username, await user1.username, connectUsername)) {
+                return false;
+            }
+            for (const msg of chat.messages) {
+                const getMsg = await Message.findOne({"_id": msg});
+                const sender = await User.findOne(msg.sender).populate('username')
+                chatArray.push({
+                    "id": getMsg.senderMessageCount,
+                    "created": getMsg.created,
+                    "sender": {
+                        "username": sender.username
+                    },
+                    "content": getMsg.content
+                });
+            }
+            return chatArray;
         }
-        for (const msg of chat.messages) {
-            const msg = await Messages.findOne(msg);
-            const sender = await User.findOne(msg.sender).populate('username')
-            chatArray.push({
-                "id": msg.id,
-                "created": msg.created,
-                "sender": {
-                    "username": sender.username
-                },
-                "content": msg.content
-            });
-        }
-        return chatArray;
+        return false;
+    } catch (err){
+        console.log(err);
+        return false;
     }
-    return false;
+
 
 };
 

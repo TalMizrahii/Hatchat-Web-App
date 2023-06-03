@@ -72,14 +72,10 @@ const getAllChats = async (username) => {
                     let lastMessage = null;
 
                     if (chat.messages.length > 0) {
-                        const message = await Message.findOne({
-                            _id: chat.messages[chat.messages.length - 1]
-                        })
-                            .populate("id created content")
-                            .lean();
+                        const message = await Message.findOne({"_id": chat.messages[chat.messages.length - 1]}).lean();
 
                         lastMessage = {
-                            id: message.id,
+                            id: message.senderMessageCount,
                             created: message.created,
                             content: message.content
                         };
@@ -128,8 +124,8 @@ const getChatByID = async (username, id) => {
         if (!chat) {
             return false;
         } else {
-            const user0 =await User.findOne({"_id":chat.users[0]}).lean();
-            const user1 =await User.findOne({"_id":chat.users[1]}).lean();
+            const user0 = await User.findOne({"_id": chat.users[0]}).lean();
+            const user1 = await User.findOne({"_id": chat.users[1]}).lean();
 
             if (!await chatValidation(await user0.username, await user1.username, username)) {
                 return false;
@@ -148,7 +144,7 @@ const getChatByID = async (username, id) => {
                 const message = await Message.findOne({"_id": msg});
                 const sender = await User.findOne(message.senderUser);
                 messages.push({
-                    "id": message.id,
+                    "id": message.senderMessageCount,
                     "created": message.created,
                     "sender": {
                         "username": sender.username,
@@ -178,8 +174,8 @@ const deleteChatByID = async (username, id) => {
         if (!chat) {
             return false;
         }
-        const user0 =await User.findOne({"_id":chat.users[0]}).lean();
-        const user1 =await User.findOne({"_id":chat.users[1]}).lean();
+        const user0 = await User.findOne({"_id": chat.users[0]}).lean();
+        const user1 = await User.findOne({"_id": chat.users[1]}).lean();
         if (!await chatValidation(await user0.username, await user1.username, username)) {
             return false;
         }

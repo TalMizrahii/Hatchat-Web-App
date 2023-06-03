@@ -14,7 +14,6 @@ const messageSchema = new Schema({
     senderUser: {
         type: Schema.Types.ObjectId,
         ref: 'Users',
-        required: true
     },
     content: {
         type: String,
