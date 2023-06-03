@@ -191,6 +191,14 @@ body {
     padding: 0;
 }
 
+.deleteChat{
+    font-size: 10px;
+    cursor: pointer;
+    float: right;
+    padding: 1px;
+    margin-left: 10px;
+}
+
 /*The chatPersonRoom*/
 
 .userName {
@@ -202,15 +210,17 @@ body {
 }
 
 .timeAndHour {
+    margin-top: 0;
+    margin-left: 0;
     margin-right: 0;
     font-size: 70%;
     float: right;
 }
 
 .lastMsg {
-    float: left;
-    margin-top: 10px;
-    margin-left: 30%;
+    float: right;
+    margin-top: 8%;
+    /*padding-left: 10%;*/
     font-size: 60%;
     font-style: italic;
 }

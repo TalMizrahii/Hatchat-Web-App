@@ -4,12 +4,12 @@ import ModalAddContact from "./ModalRelated/ModalAddContact";
 import ManuWrapper from "./ManuWraper";
 import React from "react";
 
-function NavIcons({handleLogout, addContact, filteredContacts}) {
+function NavIcons({activeUser, currentUsernameAndToken, handleLogout, addContact, filteredContacts, handleContactSwitch}) {
     return (
         <div className="nav-icons">
             <AddContactIcon/>
             <ModalAddContactWrap>
-                <ModalAddContact filteredContacts={filteredContacts} addContact={addContact}/>
+                <ModalAddContact activeUser={activeUser} handleContactSwitch={handleContactSwitch} currentUsernameAndToken={currentUsernameAndToken} filteredContacts={filteredContacts} addContact={addContact}/>
             </ModalAddContactWrap>
             <ManuWrapper handleLogout={handleLogout}/>
         </div>
