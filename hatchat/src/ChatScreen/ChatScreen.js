@@ -154,7 +154,8 @@ function ChatScreen({currentUsernameAndToken}) {
     const handleMessageToServer = async (content) => {
         // Create a data json to send to the server.
         const data = {"msg": content.text};
-        const pathToMessageUser = 'http://localhost:5000/api/Chats/' + currentContact.id + '/Messages'
+        const idMsg = currentContact.id + '/Messages';
+        const pathToMessageUser = 'http://localhost:5000/api/Chats/' + idMsg;
         const res = await fetch(pathToMessageUser, {
             method: 'post',
             headers: {

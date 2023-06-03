@@ -4,6 +4,8 @@ import {BrowserRouter as Router, Outlet, Route, Routes} from 'react-router-dom';
 import LoginScreen from './LoginScreen/LoginScreen';
 import ChatScreen from './ChatScreen/ChatScreen';
 import RegistrationScreen from './RegistrationScreen/RegistrationScreen';
+// import customEnv from 'custom-env';
+// customEnv.env(process.env.NODE_ENV, '../config');
 
 const App = () => {
     const [currentUsernameAndToken, setCurrentUsernameAndToken] = useState({
@@ -39,6 +41,7 @@ const App = () => {
         };
         reader.readAsDataURL(profilePictureFile);
     };
+
 
     async function handleUserToServer(newUser, navigate) {
         const data = {
