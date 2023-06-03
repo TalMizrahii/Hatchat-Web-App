@@ -1,8 +1,19 @@
 import userService from '../services/users.js'
 import authenticatorService from "../services/authenticator.js";
 
+
+
 const addNewUser = async (req, res) => {
-    return res.send(await userService.addNewUser(req.body.username, req.body.password, req.body.displayName, req.body.profilePic));
+    try {
+        const newUser = await userService.addNewUser(req.body.username, req.body.password, req.body.displayName, req.body.profilePic);
+        if (newUser){
+            return res.send(newUser);
+        }else {
+           return  res.status(409).json({errors: ['Conflict']});
+        }
+    }catch (err){
+        return  res.status(500).json({errors: ['Internal server error']});
+    }
 };
 
 const getUserByUsername = async (req, res) => {
