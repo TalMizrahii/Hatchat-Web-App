@@ -14,12 +14,16 @@ const addNewUser = async (username, password, displayName, profilePic) => {
     if (profilePic && !isValidBase64(profilePic)) {
         throw new Error('Invalid base64 string for profilePic');
     }
+    if (profilePic === "" || profilePic === null){
+        profilePic = defaultProfilePic;
+    }
+
 
     const newUser = new Users({
         username: username,
         password: password,
         displayName: displayName,
-        profilePic: profilePic || defaultProfilePic,
+        profilePic: profilePic,
     });
 
     try {
