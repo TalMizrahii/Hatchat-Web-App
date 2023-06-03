@@ -8,7 +8,6 @@ import FullNameInput from './FullNameInput';
 import ProfilePictureText from './ProfilePictureText';
 import CreateAccountBtn from './CreateAccountBtn';
 import PasswordInputAndReq from './PasswordInputAndReq';
-import {users} from '../DataBase/Database';
 import {useNavigate} from 'react-router-dom';
 
 
