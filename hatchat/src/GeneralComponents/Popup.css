@@ -1,0 +1,14 @@
+#popup{
+    float: right;
+    font-size: 18px;
+    font-family: Calibri, serif;
+    background-color:#ffffff;
+    color: black;
+    position: absolute;
+    left: 102%;
+    width: 150px;
+    border-radius: 15px;
+    animation: fadeInRight 1s ease-in-out;
+    padding-left: 0;
+    top: 0;
+}
