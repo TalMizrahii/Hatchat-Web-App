@@ -24,7 +24,7 @@ const getUserByUsername = async (req, res) => {
         try {
            if (data){
                console.log('The logged in user is: ' + data.username);
-               const user = await userService.getUserByUsername(token.username);
+               const user = await userService.getUserByUsername(data.username);
                if (user){
                    return res.send(user);
                }else{

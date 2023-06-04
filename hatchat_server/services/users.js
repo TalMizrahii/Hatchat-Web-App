@@ -34,7 +34,7 @@ const addNewUser = async (username, password, displayName, profilePic) => {
 
 const getUserByUsername = async (id) => {
 
-    const user = await Users.findOne(id).populate('username displayName profilePic');
+    const user = await Users.findOne({"username": id});
     if (!user) {
         console.error('User not found');
         return false;
