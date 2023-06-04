@@ -23,7 +23,6 @@ const getUserByUsername = async (req, res) => {
         const data = await authenticatorService.verifyToken(token);
         try {
            if (data){
-               console.log('The logged in user is: ' + data.username);
                const user = await userService.getUserByUsername(data.username);
                if (user){
                    return res.send(user);

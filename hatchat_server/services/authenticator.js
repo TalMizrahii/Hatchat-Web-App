@@ -5,8 +5,6 @@ import Users from '../models/users.js';
 const key = 'y6SNjgPbm3X^x2jgX5nG@8dT2T!D9X';
 const generateToken = async (username, password) => {
     try {
-
-        console.log(username)
         // Find the user in the database based on the provided username
         const user = await Users.findOne({"username": username}).populate('username password')
 

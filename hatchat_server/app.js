@@ -7,6 +7,14 @@ import authenticator from './routes/authenticator.js'
 import chat from './routes/chat.js';
 import customEnv from 'custom-env';
 
+const app = express();
+import http from 'http';
+
+const server = http.createServer(app);
+import {Server} from 'socket.io';
+
+const io = new Server(server);
+
 
 customEnv.env(process.env.NODE_ENV, './config');
 console.log(process.env.CONNECTION_STRING);
@@ -27,15 +35,13 @@ mongoose.connect(process.env.CONNECTION_STRING, connectOptions)
     });
 
 
-const app = express();
-
 app.use(express.static('public'));
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
-app.use('/api/Users',users);
-app.use('/api/Tokens',authenticator);
-app.use('/api/Chats',chat);
+app.use('/api/Users', users);
+app.use('/api/Tokens', authenticator);
+app.use('/api/Chats', chat);
 
 
 app.listen(process.env.PORT);

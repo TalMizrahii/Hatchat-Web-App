@@ -6,6 +6,7 @@ import ChatSpace from "./ChatHeaderAndList/ChatSpace";
 import ConversationSpace from "./ChatConversation/ConversationSpace";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import socket from "../Socket";
 
 
 const exitToLogin = (navigate) => {
@@ -224,6 +225,13 @@ function ChatScreen({currentUsernameAndToken}) {
         // Update the bio and lastSeen of the current contact
         updateContactInList(content);
     };
+
+
+    socket.on('newMessage', (content) => {
+        console.log("new message received");
+        // Handle the received message
+    });
+
 
     const handleContactSwitch = (contactId) => {
         setCurrentContactId(contactId);

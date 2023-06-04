@@ -8,7 +8,6 @@ export const isLoggedIn = (req) => {
         try {
             // Verify the token is valid
             const data = authenticatorService.verifyToken(token);
-            console.log('The logged in user is: ' + data.username);
             return data.username;
         } catch (err) {
             return false;

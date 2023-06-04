@@ -9,7 +9,6 @@ const addNewChat = async (req, res) => {
         const data = authenticatorService.verifyToken(token);
         try {
             if (data) {
-                console.log('The logged in user is: ' + data.username);
                 const chat = await ChatServices.addNewChat(req.body.username, data.username);
                 if (chat) {
                     return res.send(chat);
@@ -32,7 +31,6 @@ const getAllChats = async (req, res) => {
         const data = authenticatorService.verifyToken(token);
         try {
             if (data) {
-                console.log('The logged in user is: ' + data.username);
                 const chats = await ChatServices.getAllChats(data.username);
                 if (chats) {
                     return  res.send(chats);
@@ -55,7 +53,6 @@ const getChatByID = async (req, res) => {
         const data = authenticatorService.verifyToken(token);
         try {
             if (data) {
-                console.log('The logged in user is: ' + data.username);
                 const chat = await ChatServices.getChatByID(data.username, req.params.id);
                 if (chat) {
                     return  res.send(chat);
@@ -78,7 +75,6 @@ const deleteChatByID = async (req, res) => {
         const data = authenticatorService.verifyToken(token);
         try {
             if (data) {
-                console.log('The logged in user is: ' + data.username);
                 const chat = await ChatServices.deleteChatByID(data.username, req.params.id);
                 if (chat) {
                     return res.sendStatus(204);

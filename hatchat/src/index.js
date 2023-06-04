@@ -5,7 +5,6 @@ import LoginScreen from './LoginScreen/LoginScreen';
 import ChatScreen from './ChatScreen/ChatScreen';
 import RegistrationScreen from './RegistrationScreen/RegistrationScreen';
 
-
 const App = () => {
     const [currentUsernameAndToken, setCurrentUsernameAndToken] = useState({
         username: '-1',
