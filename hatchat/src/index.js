@@ -4,8 +4,7 @@ import {BrowserRouter as Router, Outlet, Route, Routes} from 'react-router-dom';
 import LoginScreen from './LoginScreen/LoginScreen';
 import ChatScreen from './ChatScreen/ChatScreen';
 import RegistrationScreen from './RegistrationScreen/RegistrationScreen';
-// import customEnv from 'custom-env';
-// customEnv.env(process.env.NODE_ENV, '../config');
+
 
 const App = () => {
     const [currentUsernameAndToken, setCurrentUsernameAndToken] = useState({
@@ -31,16 +30,21 @@ const App = () => {
             fullName,
             userName,
             password,
-            profilePicture: '',
+            profilePicture: profilePictureFile ? '' : '',
         };
 
-        const reader = new FileReader();
-        reader.onload = () => {
-            newUser.profilePicture = reader.result;
-            handleUserToServer(newUser, navigate);
-        };
-        reader.readAsDataURL(profilePictureFile);
+        if (profilePictureFile) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                newUser.profilePicture = reader.result;
+                handleUserToServer(newUser, navigate);
+            };
+            reader.readAsDataURL(profilePictureFile);
+        } else {
+            await handleUserToServer(newUser, navigate);
+        }
     };
+
 
 
     async function handleUserToServer(newUser, navigate) {

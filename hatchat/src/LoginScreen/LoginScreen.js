@@ -37,13 +37,13 @@ function LoginScreen({setCurrentUsernameAndToken}) {
         } else {
             const token = await res.text();
             const tokenStatement = "Bearer " + token;
+
             // console.log("token: " + token);
+            console.log("username: " + username);
             setCurrentUsernameAndToken({
                 username: username,
                 token: tokenStatement,
-            })
-
-
+            });
             // Navigate to the home page.
             navigate('/chat');
         }

@@ -1,10 +1,6 @@
 import React from "react";
 
-function ModalInputIdOrName({ label, placeholder, name, value, onChange }) {
-    let value1 = ''
-    if(value){
-        value1 = value;
-    }
+function ModalInputIdOrName({ label, placeholder, name, onChange }) {
     return (
         <div className="modalInput input-group rounded">
             <input
@@ -14,7 +10,6 @@ function ModalInputIdOrName({ label, placeholder, name, value, onChange }) {
                 aria-label={label}
                 aria-describedby={`${name}-addon`}
                 name={name}
-                value={value1}
                 onChange={onChange}
             />
         </div>

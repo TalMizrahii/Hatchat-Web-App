@@ -24,6 +24,9 @@ function ConversationSpace({ currentFeed, activeUser, handleNewMessage, currentC
         });
     };
 
+
+    console.log("active user" + activeUser.username);
+
     if (currentContactId === -1) {
         return (
             <div className="col-md-9 g-0 chatsList">

@@ -29,7 +29,7 @@ const addMessage = async (id, content, connectUsername) => {
             const returnVal = {
                 "id": messageID,
                 "created": new Date(),
-                "senderUser": {
+                "sender": {
                     "username": sender.username,
                     "displayName": sender.displayName,
                     "profilePic": sender.profilePic

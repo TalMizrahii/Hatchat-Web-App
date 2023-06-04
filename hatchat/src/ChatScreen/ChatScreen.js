@@ -25,6 +25,8 @@ function ChatScreen({currentUsernameAndToken}) {
 
     useEffect(() => {
         const fetchData = async () => {
+            console.log("test1 " + currentUsernameAndToken.username);
+            console.log("test2 " + currentUsernameAndToken.token);
             try {
                 await getCurrentUser();
                 await handleChatsFromServer();

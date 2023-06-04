@@ -61,6 +61,8 @@ function ModalAddContact({activeUser, handleContactSwitch, currentUsernameAndTok
             return;
         }
         if (res.ok) {
+            console.log("id: " + response.id);
+            console.log("User name: " + response.user.username);
             const newContact = {
                 id: response.id,
                 name: response.user.username,
@@ -102,7 +104,6 @@ function ModalAddContact({activeUser, handleContactSwitch, currentUsernameAndTok
                     label="Contact's name"
                     placeholder="Contact's name"
                     name="name"
-                    value={contactData.name}
                     onChange={handleChange}
                 />
             </div>
