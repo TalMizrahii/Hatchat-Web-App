@@ -10,9 +10,6 @@ const customEnv = require ('custom-env');
 const app = express();
 const http = require('http');
 app.use(express.json());
-const server = http.createServer(app);
-const {Server} = require('socket.io');
-const io = new Server(server);
 
 customEnv.env(process.env.NODE_ENV, './config');
 console.log(process.env.CONNECTION_STRING);
@@ -49,5 +46,20 @@ app.use('/api/Chats', chat);
 
 
 
+const sockets = {};
 
 app.listen(process.env.PORT);
+
+const server = http.createServer(app);
+const {Server} = require('socket.io');
+const io = new Server(server);
+
+io.on('connection', (socket) => {
+    socket.on('join', (username) => {
+        sockets[username] = socket;
+        console.log(sockets);
+        console.log(username);
+    });
+});
+
+

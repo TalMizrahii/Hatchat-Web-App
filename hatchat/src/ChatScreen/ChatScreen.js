@@ -6,7 +6,6 @@ import ChatSpace from "./ChatHeaderAndList/ChatSpace";
 import ConversationSpace from "./ChatConversation/ConversationSpace";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {io} from "socket.io-client"
 
 const exitToLogin = (navigate) => {
     return navigate('/')
@@ -18,17 +17,10 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
     const [currentFeed, setCurrentFeed] = useState([]);
     const [currentContactId, setCurrentContactId] = useState(-1);
     const navigate = useNavigate();
-    const [socketIO, setSocketIO ]= useState(null);
     let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
 
 
-    useEffect(()=> {
-        console.log("Testing")
-        const socket = io('http://127.0.0.1:2023');
-        setSocketIO(socket);
-        console.log(activeUser);
-        socket.emit('join', activeUser['username']);
-    }, [activeUser]);
+
 
 
 

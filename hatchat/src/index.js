@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Navigate, Outlet, Route, Routes} from 'react-router-dom';
 import LoginScreen from './LoginScreen/LoginScreen';
 import ChatScreen from './ChatScreen/ChatScreen';
 import RegistrationScreen from './RegistrationScreen/RegistrationScreen';
+import {io} from "socket.io-client"
+
 
 const App = () => {
     const [currentUsernameAndToken, setCurrentUsernameAndToken] = useState({
@@ -12,7 +14,17 @@ const App = () => {
         profilePic: 'avatar 1'
     });
     const [activeUser, setActiveUser] = useState(null);
+    const [socketIO, setSocketIO ]= useState(null);
 
+
+
+    useEffect(()=> {
+        console.log("Testing")
+        const socket = io('http://localhost:20233');
+        setSocketIO(socket);
+        console.log(activeUser);
+        socket.emit('join', activeUser['username']);
+    }, [activeUser]);
 
     const handleCreateAccount = async (
         fullName,
