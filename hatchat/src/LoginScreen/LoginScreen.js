@@ -24,7 +24,7 @@ function LoginScreen({setActiveUser, setCurrentUsernameAndToken}) {
         };
         try {
             // Send the credentials to the server.
-            const res = await fetch('http://localhost:5000/api/Tokens', {
+            const res = await fetch('http://localhost:20233/api/Tokens', {
                 'method': 'post',
                 'headers': {
                     'Content-Type': 'application/json',
@@ -53,10 +53,9 @@ function LoginScreen({setActiveUser, setCurrentUsernameAndToken}) {
         }
     };
     const getCurrentUser = async (username, tokenStatement) => {
-        console.log("getCurrentUser user ", username);
         // console.log("getCurrentUser user ", currentUsernameAndToken.token);
         // Create the path to the user in the server.
-        const getUserPath = 'http://localhost:5000/api/Users/' + username;
+        const getUserPath = 'http://localhost:20233/api/Users/' + username;
         const res = await fetch(getUserPath, {
             'method': 'get',
             'headers': {

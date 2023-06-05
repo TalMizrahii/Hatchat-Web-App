@@ -1,5 +1,5 @@
-import Users from "../models/users.js";
-import defaultProfilePic from '../defaultProfilePic.js';
+const Users = require("../models/users");
+const defaultProfilePic = require ( '../defaultProfilePic');
 
 const isValidBase64 = (value) => {
     try {
@@ -49,4 +49,4 @@ const getUserByUsername = async (id) => {
 };
 
 
-export default {addNewUser, getUserByUsername};
+module.exports = {addNewUser, getUserByUsername};

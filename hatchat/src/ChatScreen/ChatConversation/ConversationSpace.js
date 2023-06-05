@@ -53,7 +53,6 @@ function ConversationSpace({
                 <MsgScrollerGood>
                     {currentFeed && currentFeed.length > 0 ? (
                         currentFeed.map((msg, index) => {
-                            console.log("msg.sender.username ", msg.sender.username, " activeUser.username ", activeUser.username);
                             if (msg.sender.username === activeUser.username) {
                                 return (
                                     <UserSelfMsg
@@ -70,7 +69,6 @@ function ConversationSpace({
                                     (contact) => contact.name === msg.sender.username
                                 );
                                 const profilePic = contact?.profilePic;
-                                console.log(profilePic)
                                 return (
                                     <ContactResponseMsg
                                         contact={{

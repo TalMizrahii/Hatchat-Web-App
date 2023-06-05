@@ -1,17 +1,17 @@
-import express from 'express';
-import bodyParser from 'body-parser'
-import cors from 'cors'
-import mongoose from "mongoose";
-import users from './routes/users.js'
-import authenticator from './routes/authenticator.js'
-import chat from './routes/chat.js';
-import customEnv from 'custom-env';
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mongoose = require("mongoose");
+const users = require('./routes/users');
+const authenticator = require('./routes/authenticator');
+const chat = require('./routes/chat');
+const customEnv = require ('custom-env');
 
 const app = express();
-import http from 'http';
-
+const http = require('http');
+app.use(express.json());
 const server = http.createServer(app);
-import {Server} from 'socket.io';
+const {Server} = require('socket.io');
 const io = new Server(server);
 
 customEnv.env(process.env.NODE_ENV, './config');
@@ -33,22 +33,21 @@ mongoose.connect(process.env.CONNECTION_STRING, connectOptions)
     });
 
 
-const sockets = {};
-io.on('connection', (socket) => {
-    socket.on('join', (username) => {
-        sockets[username] = socket;
-        console.log(sockets);
-        console.log(username);
-    });
-});
 
-app.use(express.static('public'));
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.json());
+const site = express.static('public');
+
+app.use('/', site);
+app.use('/chat', site);
+app.use('/register', site);
+
+
 app.use('/api/Users', users);
 app.use('/api/Tokens', authenticator);
 app.use('/api/Chats', chat);
+
+
 
 
 app.listen(process.env.PORT);

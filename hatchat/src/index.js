@@ -52,7 +52,7 @@ const App = () => {
             displayName: newUser.fullName.toString(),
             profilePic: newUser.profilePicture,
         };
-        const res = await fetch('http://localhost:5000/api/Users', {
+        const res = await fetch('http://localhost:20233/api/Users', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',

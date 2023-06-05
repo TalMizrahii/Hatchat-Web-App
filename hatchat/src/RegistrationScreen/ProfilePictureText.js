@@ -8,7 +8,6 @@ function ProfilePictureText({ handlePicClick }) {
         if (file && regex.test(file.name)) {
             const fileSizeInBytes = file.size;
             const fileSizeInKB = fileSizeInBytes / 1024; // Convert to kilobytes
-            console.log("file size", fileSizeInKB)
             if (fileSizeInKB > 70) {
                 alert('Please select an image file that is 74 KB or smaller.');
                 e.target.value = '';
