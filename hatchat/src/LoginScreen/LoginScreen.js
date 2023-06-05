@@ -9,7 +9,7 @@ import PasswordInput from "./PasswordInput";
 import {useNavigate} from "react-router-dom";
 
 
-function LoginScreen({setCurrentUsernameAndToken}) {
+function LoginScreen({setActiveUser, currentUsernameAndToken, setCurrentUsernameAndToken}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -22,30 +22,55 @@ function LoginScreen({setCurrentUsernameAndToken}) {
             "username": username,
             "password": password,
         };
+        try {
+            // Send the credentials to the server.
+            const res = await fetch('http://localhost:5000/api/Tokens', {
+                'method': 'post',
+                'headers': {
+                    'Content-Type': 'application/json',
+                },
+                'body': JSON.stringify(credentials)
+            })
+            if (!res.ok) {
+                // Display an error message.
+                alert("Invalid username or password");
+            } else {
+                const token = await res.text();
+                const tokenStatement = "Bearer " + token;
 
-        // Send the credentials to the server.
-        const res = await fetch('http://localhost:5000/api/Tokens', {
-            'method': 'post',
+                // console.log("token: " + token);
+                await setCurrentUsernameAndToken({
+                    username: username,
+                    token: tokenStatement,
+                });
+                await getCurrentUser( username,  tokenStatement);
+                // Navigate to the home page.
+                navigate('/chat');
+            }
+        } catch (err) {
+            alert("error during login");
+            navigate('/');
+        }
+    };
+    const getCurrentUser = async (username, tokenStatement) => {
+        console.log("getCurrentUser user ", username);
+        // console.log("getCurrentUser user ", currentUsernameAndToken.token);
+        // Create the path to the user in the server.
+        const getUserPath = 'http://localhost:5000/api/Users/' + username;
+        const res = await fetch(getUserPath, {
+            'method': 'get',
             'headers': {
                 'Content-Type': 'application/json',
+                'Authorization': tokenStatement,
+                'username': username,
             },
-            'body': JSON.stringify(credentials)
-        })
+        });
         if (!res.ok) {
             // Display an error message.
             alert("Invalid username or password");
         } else {
-            const token = await res.text();
-            const tokenStatement = "Bearer " + token;
-
-            // console.log("token: " + token);
-            console.log("username: " + username);
-            setCurrentUsernameAndToken({
-                username: username,
-                token: tokenStatement,
-            });
-            // Navigate to the home page.
-            navigate('/chat');
+            const currentActiveUser = await res.json();
+            setActiveUser(currentActiveUser);
         }
     };
 

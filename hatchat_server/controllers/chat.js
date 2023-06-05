@@ -15,6 +15,8 @@ const addNewChat = async (req, res) => {
                 } else {
                     return res.status(401).json({errors: ['Unauthorized']});
                 }
+            } else {
+                return res.status(401).json({errors: ['Unauthorized']});
             }
         } catch (err) {
             return res.status(401).json({errors: ['Unauthorized']});
@@ -33,10 +35,12 @@ const getAllChats = async (req, res) => {
             if (data) {
                 const chats = await ChatServices.getAllChats(data.username);
                 if (chats) {
-                    return  res.send(chats);
+                    return res.send(chats);
                 } else {
                     return res.status(401).json({errors: ['Unauthorized']});
                 }
+            } else {
+                return res.status(401).json({errors: ['Unauthorized']});
             }
         } catch (err) {
             return res.status(401).json({errors: ['Unauthorized']});
@@ -55,10 +59,12 @@ const getChatByID = async (req, res) => {
             if (data) {
                 const chat = await ChatServices.getChatByID(data.username, req.params.id);
                 if (chat) {
-                    return  res.send(chat);
+                    return res.send(chat);
                 } else {
                     return res.status(401).json({errors: ['Chat not Found']});
                 }
+            } else {
+                return res.status(401).json({errors: ['Unauthorized']});
             }
         } catch (err) {
             return res.status(401).json({errors: ['Unauthorized']});
@@ -81,6 +87,8 @@ const deleteChatByID = async (req, res) => {
                 } else {
                     return res.status(401).json({errors: ['Unauthorized']});
                 }
+            } else {
+                return res.status(401).json({errors: ['Unauthorized']});
             }
         } catch (err) {
             return res.status(401).json({errors: ['Unauthorized']});
@@ -90,4 +98,4 @@ const deleteChatByID = async (req, res) => {
     }
 }
 
-export default {addNewChat, getAllChats, getChatByID,deleteChatByID}
+export default {addNewChat, getAllChats, getChatByID, deleteChatByID}

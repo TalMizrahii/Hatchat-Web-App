@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router, Outlet, Route, Routes} from 'react-router-dom';
+import {BrowserRouter as Router, Navigate, Outlet, Route, Routes} from 'react-router-dom';
 import LoginScreen from './LoginScreen/LoginScreen';
 import ChatScreen from './ChatScreen/ChatScreen';
 import RegistrationScreen from './RegistrationScreen/RegistrationScreen';
@@ -11,6 +11,8 @@ const App = () => {
         displayName: '-1',
         profilePic: 'avatar 1'
     });
+    const [activeUser, setActiveUser] = useState(null);
+
 
     const handleCreateAccount = async (
         fullName,
@@ -45,7 +47,6 @@ const App = () => {
     };
 
 
-
     async function handleUserToServer(newUser, navigate) {
         const data = {
             username: newUser.userName.toString(),
@@ -78,12 +79,16 @@ const App = () => {
                 <Route path="/" element={<Outlet/>}>
                     <Route
                         path="/"
-                        element={<LoginScreen setCurrentUsernameAndToken={setCurrentUsernameAndToken}/>}
+                        element={<LoginScreen setActiveUser={setActiveUser}
+                                              currentUsernameAndToken={currentUsernameAndToken}
+                                              setCurrentUsernameAndToken={setCurrentUsernameAndToken}/>}
                     />
-                    <Route
-                        path="/chat"
-                        element={<ChatScreen currentUsernameAndToken={currentUsernameAndToken}/>}
-                    />
+
+                    <Route path="/chat" element={activeUser ?
+                        <ChatScreen activeUser={activeUser}
+                                    currentUsernameAndToken={currentUsernameAndToken}/> :
+                        <Navigate to="/" />}/>
+
                     <Route
                         path="/register"
                         element={<RegistrationScreen handleCreateAccount={handleCreateAccount}/>}

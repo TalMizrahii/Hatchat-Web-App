@@ -14,6 +14,8 @@ const addMessage = async (req, res) => {
                 } else {
                     return res.status(401).json({errors: ['Unauthorized']});
                 }
+            } else {
+                return res.status(401).json({errors: ['Unauthorized']});
             }
         } catch (err) {
             console.log(err);
@@ -37,6 +39,8 @@ const getMessage = async (req, res) => {
                 } else {
                     return res.status(401).json({errors: ['Unauthorized']});
                 }
+            } else {
+                return res.status(401).json({errors: ['Unauthorized']});
             }
         } catch (err) {
             return res.status(401).json({errors: ['Unauthorized']});

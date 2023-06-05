@@ -29,4 +29,4 @@ const processLogin = async (req, res) => {
     }
 };
 
-export default {isLoggedIn,processLogin}
+export default {isLoggedIn, processLogin}

@@ -13,21 +13,19 @@ const exitToLogin = (navigate) => {
     return navigate('/')
 };
 
-function ChatScreen({currentUsernameAndToken}) {
+function ChatScreen({activeUser, currentUsernameAndToken}) {
     const [searchContent, setSearchContent] = useState("");
-    const [activeUser, setActiveUser] = useState({});
     const [filteredContacts, setFilteredContacts] = useState([]);
     const [currentFeed, setCurrentFeed] = useState([]);
     const [currentContactId, setCurrentContactId] = useState(-1);
     const navigate = useNavigate();
 
-    var currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
+    let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await getCurrentUser();
                 await handleChatsFromServer();
             } catch (error) {
                 // Handle the error here
@@ -41,26 +39,7 @@ function ChatScreen({currentUsernameAndToken}) {
         // Add missing dependencies to the dependency array
     }, [navigate, currentUsernameAndToken]);
 
-    const getCurrentUser = async () => {
-        // Create the path to the user in the server.
-        const getUserPath = 'http://localhost:5000/api/Users/' + currentUsernameAndToken.username;
-        const res = await fetch(getUserPath, {
-            'method': 'get',
-            'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': currentUsernameAndToken.token,
-                'username': currentUsernameAndToken.username,
-            },
-        });
-        if (!res.ok) {
-            navigate('/');
-            // Display an error message.
-            alert("Invalid username or password");
-        } else {
-            const currentActiveUser = await res.json();
-            setActiveUser(currentActiveUser);
-        }
-    };
+
 
     const handleLogout = () => {
         setSearchContent("");
@@ -219,11 +198,6 @@ function ChatScreen({currentUsernameAndToken}) {
     }
 
     const handleNewMessage = (content) => {
-        const newMessage = {
-            text: content.text,
-            timeAndDate: content.timeAndDate,
-        };
-
         const response = handleMessageToServer(content);
         // Update the bio and lastSeen of the current contact
         updateContactInList(content);
