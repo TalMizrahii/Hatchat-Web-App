@@ -11,9 +11,9 @@ const messageSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    senderUser: {
+    sender: {
         type: Schema.Types.ObjectId,
-        ref: 'Users',
+        ref: 'users',
     },
     content: {
         type: String,
