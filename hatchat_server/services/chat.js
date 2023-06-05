@@ -142,13 +142,14 @@ const getChatByID = async (username, id) => {
             for (const msg of chat.messages) {
                 const message = await Message.findOne({"_id": msg});
                 const sender = await User.findOne(message.senderUser);
+                const receiver = await User.findOne({"_id": sender});
                 messages.push({
                     "id": message.senderMessageCount,
                     "created": message.created,
                     "sender": {
-                        "username": sender.username,
-                        "displayName": sender.displayName,
-                        "profilePic": sender.profilePic
+                        "username": receiver.username,
+                        "displayName": receiver.displayName,
+                        "profilePic": receiver.profilePic
                     },
                     "content": message.content
                 });
