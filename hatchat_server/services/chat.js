@@ -120,7 +120,6 @@ const chatValidation = async (username1, username2, connectedUsername) => {
 const getChatByID = async (username, id) => {
     try {
         const chat = await Chat.findOne({"id": id}).lean();
-        await console.log(chat);
         if (!chat) {
             return false;
         } else {

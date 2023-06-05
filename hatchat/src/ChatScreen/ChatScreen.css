@@ -46,6 +46,10 @@ body {
 .contactChat{
     cursor: pointer;
 }
+.contactChatIndexed{
+    cursor: pointer;
+    background: #eaebf0;
+}
 
 .headerOfBox {
     width: 100%;

@@ -5,13 +5,14 @@ import SearchInput from "./SearchInput";
 import ListGroupOfContacts from "./ListGroupOfContacts.";
 
 function ChatSpace({
-                       handleChatDelete, currentUsernameAndToken,
+                       handleChatDelete,
+                       currentUsernameAndToken,
                        handleLogout,
                        activeUser,
                        handleSearch,
                        addContact,
                        filteredContacts,
-                       handleContactSwitch
+                       handleContactSwitch,
                    }) {
 
     return (
@@ -30,7 +31,8 @@ function ChatSpace({
                 <SearchInput handleSearch={handleSearch}/>
                 <ListGroupOfContacts handleChatDelete={handleChatDelete}
                                      handleContactSwitch={handleContactSwitch}
-                                     filteredContacts={filteredContacts}/>
+                                     filteredContacts={filteredContacts}
+                                     />
             </div>
         </>
     );

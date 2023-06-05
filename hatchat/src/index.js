@@ -29,7 +29,7 @@ const App = () => {
             fullName,
             userName,
             password,
-            profilePicture: profilePictureFile ? '' : '',
+            profilePicture: '',
         };
 
         if (profilePictureFile) {

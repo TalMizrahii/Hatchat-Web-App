@@ -11,10 +11,7 @@ const app = express();
 import http from 'http';
 
 const server = http.createServer(app);
-import {Server} from 'socket.io';
-
-const io = new Server(server);
-
+// import {Server} from 'socket.io';
 
 customEnv.env(process.env.NODE_ENV, './config');
 console.log(process.env.CONNECTION_STRING);
@@ -33,6 +30,11 @@ mongoose.connect(process.env.CONNECTION_STRING, connectOptions)
     .catch((error) => {
         console.error('Error connecting to the database:', error);
     });
+
+
+// const sockets = {};
+
+
 
 
 app.use(express.static('public'));

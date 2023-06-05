@@ -6,7 +6,7 @@ import ChatSpace from "./ChatHeaderAndList/ChatSpace";
 import ConversationSpace from "./ChatConversation/ConversationSpace";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import socket from "../Socket";
+// import socket from "../Socket";
 
 
 const exitToLogin = (navigate) => {
@@ -21,7 +21,7 @@ function ChatScreen({currentUsernameAndToken}) {
     const [currentContactId, setCurrentContactId] = useState(-1);
     const navigate = useNavigate();
 
-    let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
+    var currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
 
 
     useEffect(() => {
@@ -184,6 +184,9 @@ function ChatScreen({currentUsernameAndToken}) {
         if (res.ok) {
             const response = await res.json();
             setCurrentFeed(response.messages);
+            // console.log("sender : "+ response.messages[0].sender.username);
+            console.log("id 1: "+ currentContact.name);
+            console.log("id 2: "+ currentContactId);
         } else {
             // Display an error message.
         }
@@ -227,17 +230,13 @@ function ChatScreen({currentUsernameAndToken}) {
     };
 
 
-    socket.on('newMessage', (content) => {
-        console.log("new message received");
-        // Handle the received message
-    });
-
-
     const handleContactSwitch = (contactId) => {
+        console.log("contact id: " + contactId);
         setCurrentContactId(contactId);
         const response2 = handleMessagePresentation(contactId);
-        currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
-    }
+        currentContact = filteredContacts.find((contact) => contact.id === contactId);
+
+    };
 
     const handleChatDeleteFromServer = async (chatId) => {
         const res = await fetch('http://localhost:5000/api/Chats/' + chatId, {
@@ -282,13 +281,17 @@ function ChatScreen({currentUsernameAndToken}) {
                            addContact={addContact}
                            filteredContacts={filteredContacts}
                            handleChatDelete={handleChatDelete}
+                           currentContact={currentContact}
                 />
                 {/*Contains all components about the conversation with the contacts*/}
                 <ConversationSpace currentFeed={currentFeed}
                                    activeUser={activeUser}
                                    currentContact={currentContact}
                                    currentContactId={currentContactId}
-                                   handleNewMessage={handleNewMessage}/>
+                                   handleNewMessage={handleNewMessage}
+                                   filteredContacts={filteredContacts}
+
+                />
             </GeneralContainer>
         </>
     );

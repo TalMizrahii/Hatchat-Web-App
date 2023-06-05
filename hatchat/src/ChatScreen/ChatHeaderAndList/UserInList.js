@@ -39,7 +39,6 @@ function UserInList({handleChatDelete, contact, handleContactSwitch}) {
         truncatedBio = contact.bio.length > 8 ? contact.bio.substring(0, 8) + '...' : contact.bio;
     }
 
-
     return (
         <li
             className="contactChat list-group-item list-group-item-action"
