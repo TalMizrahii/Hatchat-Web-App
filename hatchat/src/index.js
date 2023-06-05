@@ -45,8 +45,6 @@ const App = () => {
             await handleUserToServer(newUser, navigate);
         }
     };
-
-
     async function handleUserToServer(newUser, navigate) {
         const data = {
             username: newUser.userName.toString(),
@@ -54,7 +52,6 @@ const App = () => {
             displayName: newUser.fullName.toString(),
             profilePic: newUser.profilePicture,
         };
-
         const res = await fetch('http://localhost:5000/api/Users', {
             method: 'post',
             headers: {
@@ -62,7 +59,6 @@ const App = () => {
             },
             body: JSON.stringify(data)
         });
-
         if (res.ok) {
             const responseData = await res.text();
             navigate('/');
@@ -80,7 +76,6 @@ const App = () => {
                     <Route
                         path="/"
                         element={<LoginScreen setActiveUser={setActiveUser}
-                                              currentUsernameAndToken={currentUsernameAndToken}
                                               setCurrentUsernameAndToken={setCurrentUsernameAndToken}/>}
                     />
 

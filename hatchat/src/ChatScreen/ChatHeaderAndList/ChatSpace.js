@@ -13,6 +13,7 @@ function ChatSpace({
                        addContact,
                        filteredContacts,
                        handleContactSwitch,
+                       currentContact,
                    }) {
 
     return (
@@ -32,6 +33,7 @@ function ChatSpace({
                 <ListGroupOfContacts handleChatDelete={handleChatDelete}
                                      handleContactSwitch={handleContactSwitch}
                                      filteredContacts={filteredContacts}
+                                     currentContact={currentContact}
                                      />
             </div>
         </>

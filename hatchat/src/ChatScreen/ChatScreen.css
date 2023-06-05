@@ -43,10 +43,11 @@ body {
 
 }
 
-.contactChat{
+.contactChat {
     cursor: pointer;
 }
-.contactChatIndexed{
+
+.contactChatIndexed {
     cursor: pointer;
     background: #eaebf0;
 }
@@ -195,7 +196,7 @@ body {
     padding: 0;
 }
 
-.deleteChat{
+.deleteChat {
     font-size: 10px;
     cursor: pointer;
     float: right;
@@ -233,9 +234,10 @@ body {
     display: none;
 }
 
-.modalInput{
+.modalInput {
     padding: 5px;
 }
+
 #exampleModalLabel .modal-title-background {
     background-color: white;
 }
@@ -288,7 +290,7 @@ body {
     z-index: 2;
 }
 
-.chatText{
+.chatText {
     margin-bottom: 3px; /* Add some bottom margin to create space between messages */
     overflow-wrap: break-word;
 }
@@ -312,7 +314,7 @@ body {
     width: 10%;
 }
 
-.btn-success{
+.btn-success {
     --bs-btn-hover-bg: #207068;
     background-color: #207068;
 
@@ -374,21 +376,21 @@ body {
     max-height: 80%;
 }
 
-.chatWrap{
+.chatWrap {
     /*padding: 7px;*/
     padding-top: 15px !important;
     padding-left: 5px !important;
     padding-right: 5px !important;
 }
 
-.pe-3{
+.pe-3 {
     padding: 0;
 }
 
-.pt-3{
+.pt-3 {
     padding: 0;
 }
 
-.small{
+.small {
     margin-bottom: 0 !important;
 }

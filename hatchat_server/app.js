@@ -11,7 +11,8 @@ const app = express();
 import http from 'http';
 
 const server = http.createServer(app);
-// import {Server} from 'socket.io';
+import {Server} from 'socket.io';
+const io = new Server(server);
 
 customEnv.env(process.env.NODE_ENV, './config');
 console.log(process.env.CONNECTION_STRING);
@@ -32,10 +33,14 @@ mongoose.connect(process.env.CONNECTION_STRING, connectOptions)
     });
 
 
-// const sockets = {};
-
-
-
+const sockets = {};
+io.on('connection', (socket) => {
+    socket.on('join', (username) => {
+        sockets[username] = socket;
+        console.log(sockets);
+        console.log(username);
+    });
+});
 
 app.use(express.static('public'));
 app.use(cors());

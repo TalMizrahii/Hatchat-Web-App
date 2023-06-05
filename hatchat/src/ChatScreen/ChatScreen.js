@@ -6,8 +6,7 @@ import ChatSpace from "./ChatHeaderAndList/ChatSpace";
 import ConversationSpace from "./ChatConversation/ConversationSpace";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-// import socket from "../Socket";
-
+import socket from "../Socket";
 
 const exitToLogin = (navigate) => {
     return navigate('/')
@@ -22,11 +21,11 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
 
     let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
 
-
     useEffect(() => {
         const fetchData = async () => {
             try {
                 await handleChatsFromServer();
+                socket.emit('join', activeUser.username);
             } catch (error) {
                 // Handle the error here
                 console.error("Error fetching user:", error);
@@ -38,8 +37,6 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
         const res = fetchData(); // Call the fetchData function
         // Add missing dependencies to the dependency array
     }, [navigate, currentUsernameAndToken]);
-
-
 
     const handleLogout = () => {
         setSearchContent("");
@@ -62,6 +59,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
         }
     };
 
+
     const addContact = (contact) => {
         const existingContact = filteredContacts.find((c) => c.id === contact.id);
         if (!existingContact) {
@@ -70,7 +68,6 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
         }
         setCurrentContactId(contact.id);
     };
-
 
     const formatTimestamp = (timestamp) => {
         const date = new Date(timestamp);
@@ -82,7 +79,6 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             hour12: true
         });
     };
-
 
     const handleChatsFromServer = async () => {
         try {
@@ -164,8 +160,8 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             const response = await res.json();
             setCurrentFeed(response.messages);
             // console.log("sender : "+ response.messages[0].sender.username);
-            console.log("id 1: "+ currentContact.name);
-            console.log("id 2: "+ currentContactId);
+            console.log("id 1: " + currentContact.name);
+            console.log("id 2: " + currentContactId);
         } else {
             // Display an error message.
         }

@@ -6,6 +6,15 @@ function ProfilePictureText({ handlePicClick }) {
         const regex = /([^\\s]+(\.(?:jpe?g|png|gif|bmp))$)/i;
 
         if (file && regex.test(file.name)) {
+            const fileSizeInBytes = file.size;
+            const fileSizeInKB = fileSizeInBytes / 1024; // Convert to kilobytes
+            console.log("file size", fileSizeInKB)
+            if (fileSizeInKB > 70) {
+                alert('Please select an image file that is 74 KB or smaller.');
+                e.target.value = '';
+                return;
+            }
+
             handlePicClick(file);
         } else {
             alert('Please select a valid image file (JPG, JPEG, PNG, GIF, BMP).');

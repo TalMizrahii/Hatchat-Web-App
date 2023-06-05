@@ -9,7 +9,7 @@ import PasswordInput from "./PasswordInput";
 import {useNavigate} from "react-router-dom";
 
 
-function LoginScreen({setActiveUser, currentUsernameAndToken, setCurrentUsernameAndToken}) {
+function LoginScreen({setActiveUser, setCurrentUsernameAndToken}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 

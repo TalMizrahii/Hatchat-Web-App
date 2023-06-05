@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 
-function UserInList({handleChatDelete, contact, handleContactSwitch}) {
+function UserInList({currentContact, handleChatDelete, contact, handleContactSwitch}) {
     const [showButton, setShowButton] = useState(false);
     const listItemRef = useRef(null);
 
@@ -39,9 +39,16 @@ function UserInList({handleChatDelete, contact, handleContactSwitch}) {
         truncatedBio = contact.bio.length > 8 ? contact.bio.substring(0, 8) + '...' : contact.bio;
     }
 
+
+    let classname = "contactChat";
+
+    if(currentContact && currentContact.name === contact.name){
+        classname = "contactChatIndexed";
+    }
+
     return (
         <li
-            className="contactChat list-group-item list-group-item-action"
+            className={`${classname} list-group-item list-group-item-action`}
             onClick={handleClick}
             onContextMenu={handleContextMenu}
             ref={listItemRef}
