@@ -1,6 +1,6 @@
-import Chat from "../models/chat.js";
-import User from "../models/users.js";
-import Message from "../models/message.js";
+const Chat = require('../models/chat');
+const User = require('../models/users');
+const Message = require('../models/message');
 
 const addNewChat = async (username, connectedUsername) => {
     try {
@@ -23,7 +23,6 @@ const addNewChat = async (username, connectedUsername) => {
                 users: [saveUser, connectedUser],
                 messages: []
             });
-
 
             // Save the new chat
             const savedChat = await newChat.save();

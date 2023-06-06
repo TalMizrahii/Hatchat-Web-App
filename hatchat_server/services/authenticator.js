@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
-import Users from '../models/users.js';
+const jwt = require('jsonwebtoken');
+const Users = require('../models/users');
 
 
 const key = 'y6SNjgPbm3X^x2jgX5nG@8dT2T!D9X';
@@ -12,7 +12,7 @@ const generateToken = async (username, password) => {
         if (user.username === username && user.password === password) {
             const data = {username};
             // Generate the token and return the token
-            return  jwt.sign(data, key);
+            return jwt.sign(data, key);
         } else {
             // Invalid username/password
             return false;
@@ -24,13 +24,13 @@ const generateToken = async (username, password) => {
 };
 
 
-const verifyToken =  (token) => {
+const verifyToken = (token) => {
     try {
-        return  jwt.verify(token, key);
+        return jwt.verify(token, key);
     } catch (err) {
         console.error(err);
         return false;
     }
 };
 
-export default {generateToken, verifyToken}
+module.exports = {generateToken, verifyToken}
