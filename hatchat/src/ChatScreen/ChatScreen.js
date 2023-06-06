@@ -19,13 +19,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
     const navigate = useNavigate();
     let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
 
-
-
-
-
-
     useEffect(() => {
-
         const fetchData = async () => {
             try {
                 await handleChatsFromServer();
@@ -61,7 +55,6 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             setFilteredContacts(filtered);
         }
     };
-
 
     const addContact = (contact) => {
         const existingContact = filteredContacts.find((c) => c.id === contact.id);

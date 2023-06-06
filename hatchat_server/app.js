@@ -44,16 +44,12 @@ app.use('/api/Users', users);
 app.use('/api/Tokens', authenticator);
 app.use('/api/Chats', chat);
 
-
-
-const sockets = {};
-
-app.listen(process.env.PORT);
-
 const server = http.createServer(app);
 const {Server} = require('socket.io');
+server.listen(20234);
 const io = new Server(server);
 
+const sockets = {};
 io.on('connection', (socket) => {
     socket.on('join', (username) => {
         sockets[username] = socket;
@@ -62,4 +58,4 @@ io.on('connection', (socket) => {
     });
 });
 
-
+app.listen(process.env.PORT);

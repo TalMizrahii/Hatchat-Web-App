@@ -20,7 +20,7 @@ const App = () => {
 
     useEffect(()=> {
         console.log("Testing")
-        const socket = io('http://localhost:20233');
+        const socket = io('http://localhost:20234');
         setSocketIO(socket);
         console.log(activeUser);
         socket.emit('join', activeUser['username']);
