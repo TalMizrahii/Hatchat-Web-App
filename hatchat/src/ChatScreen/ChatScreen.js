@@ -25,8 +25,6 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
         userSocket.current.emit('join', currentUsernameAndToken.username);
 
         userSocket.current.on('userReceiveMessage', (content) => {
-            console.log(content.id);
-            console.log(content);
             if (currentContactId === content.id) {
                 setCurrentFeed(prevFeed => [...prevFeed, content.message]);
             } else if (filteredContacts.some((contact) => contact.id === content.id)) {
@@ -40,6 +38,21 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
                 timeAndDate: formatTimestamp(content.message.created),
             })
         });
+
+        userSocket.current.on('deleteChat', (content) => {
+            setFilteredContacts((prevFilteredContacts) => {
+                const updatedContacts = [...prevFilteredContacts];
+                const contactIndex = updatedContacts.findIndex(
+                    (contact) => contact.id === content.id
+                );
+                if (contactIndex !== -1) {
+                    updatedContacts.splice(contactIndex, 1);
+                }
+                return updatedContacts;
+            });
+        });
+
+
     }, [currentUsernameAndToken]);
 
 
@@ -189,8 +202,13 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
         if (content.text === "") {
             return;
         }
+
+        let id = currentContactId;
+        if(content.id){
+            id = content.id;
+        }
         const newMessage = {
-            id: content.id || currentContactId,
+            id: id,
             text: content.text,
             timeAndDate: content.timeAndDate,
         };
@@ -208,7 +226,6 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
                 };
                 updatedContacts.unshift(updatedContacts.splice(contactIndex, 1)[0]);
             }
-            setFilteredContacts(updatedContacts);
             return updatedContacts;
         });
     }
