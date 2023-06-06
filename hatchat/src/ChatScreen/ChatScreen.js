@@ -20,8 +20,8 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
     const navigate = useNavigate();
     let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
     const userSocket = useRef(null);
-    useEffect(()=> {
-        userSocket.current =  io('http://localhost:5000');
+    useEffect(() => {
+        userSocket.current = io('http://localhost:5000');
         userSocket.current.emit('join', currentUsernameAndToken.username);
 
         userSocket.current.on('userReceiveMessage', (content) => {
@@ -29,16 +29,18 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             console.log(content);
             if (currentContactId === content.id) {
                 setCurrentFeed(prevFeed => [...prevFeed, content.message]);
-                return;
-            }
-            if (filteredContacts.some((contact) => contact.id === content.id)) {
+            } else if (filteredContacts.some((contact) => contact.id === content.id)) {
                 handleContactSwitch(content.id);
-                return;
+            } else {
+                const res = addPersonalChat(content.id);
             }
-            const res = addPersonalChat(content.id);
+            updateContactInList({
+                id: content.id,
+                text: content.message,
+                timeAndDate: formatTimestamp(content.message.created),
+            })
         });
-
-    },[currentUsernameAndToken]);
+    }, [currentUsernameAndToken]);
 
 
     useEffect(() => {
@@ -188,6 +190,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             return;
         }
         const newMessage = {
+            id: content.id || currentContactId,
             text: content.text,
             timeAndDate: content.timeAndDate,
         };
@@ -195,7 +198,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
         setFilteredContacts((prevFilteredContacts) => {
             const updatedContacts = [...prevFilteredContacts];
             const contactIndex = updatedContacts.findIndex(
-                (contact) => contact.id === currentContactId
+                (contact) => contact.id === newMessage.id
             );
             if (contactIndex !== -1) {
                 updatedContacts[contactIndex] = {
@@ -205,6 +208,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
                 };
                 updatedContacts.unshift(updatedContacts.splice(contactIndex, 1)[0]);
             }
+            setFilteredContacts(updatedContacts);
             return updatedContacts;
         });
     }
@@ -217,7 +221,6 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
 
 
     const handleContactSwitch = (contactId) => {
-        console.log("contact id: " + contactId);
         setCurrentContactId(contactId);
         const response2 = handleMessagePresentation(contactId);
         currentContact = filteredContacts.find((contact) => contact.id === contactId);
@@ -269,7 +272,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             if (response.users[userNumber].username === currentUsernameAndToken.username) {
                 userNumber = 1;
             }
-            console.log(response.id);
+
             const contact = {
                 id: parseInt(response.id),
                 name: response.users[userNumber].displayName,
@@ -289,7 +292,6 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             console.log("Error in adding a new contact.");
         }
     }
-
 
 
     return (

@@ -35,7 +35,6 @@ io.on('connection', socket => {
         console.log(username + ' joined the chat');
         socketsArray[username] = socket;
         // Now you can access the socket using the username as the key
-
     });
 });
 
