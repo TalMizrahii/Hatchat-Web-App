@@ -39,11 +39,11 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             })
         });
 
-        userSocket.current.on('deleteChat', (content) => {
+        userSocket.current.on('deleteChat', (id) => {
             setFilteredContacts((prevFilteredContacts) => {
                 const updatedContacts = [...prevFilteredContacts];
                 const contactIndex = updatedContacts.findIndex(
-                    (contact) => contact.id === content.id
+                    (contact) => contact.id === id
                 );
                 if (contactIndex !== -1) {
                     updatedContacts.splice(contactIndex, 1);
