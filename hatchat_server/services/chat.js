@@ -6,7 +6,7 @@ import {socketsArray} from "../models/socketsArray.js";
 const deleteChat = async (username, deleteChatID) => {
     try {
         const socketObject = socketsArray[username];
-        await socketObject.emit('deleteChat', deleteChatID);
+        await socketObject.emit('deleteChat', {'id': deleteChatID});
     } catch (err) {
         console.log("Sending delete signal failed!");
     }
@@ -178,7 +178,6 @@ const getChatByID = async (username, id) => {
 const deleteChatByID = async (username, id) => {
     try {
         const chat = await Chat.findOne({"id": id}).lean();
-        await console.log(chat);
         if (!chat) {
             return false;
         }
@@ -187,11 +186,15 @@ const deleteChatByID = async (username, id) => {
         if (!await chatValidation(await user0.username, await user1.username, username)) {
             return false;
         }
+        for (const msg of chat.messages) {
+            await Message.deleteOne({'_id': msg}).exec();
+        }
         if (user0.username === username) {
             await deleteChat(user1.username, id);
         } else {
             await deleteChat(user0.username, id);
         }
+
         return Chat.deleteOne({id})
     } catch (error) {
         console.error("Error fetching chat:", error);

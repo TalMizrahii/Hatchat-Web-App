@@ -34,24 +34,20 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             }
             updateContactInList({
                 id: content.id,
-                text: content.message,
+                text: content.message.content,
                 timeAndDate: formatTimestamp(content.message.created),
-            })
-        });
-
-        userSocket.current.on('deleteChat', (id) => {
-            setFilteredContacts((prevFilteredContacts) => {
-                const updatedContacts = [...prevFilteredContacts];
-                const contactIndex = updatedContacts.findIndex(
-                    (contact) => contact.id === id
-                );
-                if (contactIndex !== -1) {
-                    updatedContacts.splice(contactIndex, 1);
-                }
-                return updatedContacts;
             });
         });
 
+        userSocket.current.on('deleteChat', (content) => {
+            setFilteredContacts((prevFilteredContacts) => {
+                return prevFilteredContacts.filter((contact) => contact.id !== content.id);
+            });
+            if (currentContactId === content.id) {
+                setCurrentFeed([]);
+                setCurrentContactId(-1);
+            }
+        });
 
     }, [currentUsernameAndToken]);
 
@@ -207,6 +203,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
         if(content.id){
             id = content.id;
         }
+        setCurrentContactId(id);
         const newMessage = {
             id: id,
             text: content.text,
@@ -272,6 +269,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             }
             return updatedContacts;
         });
+        setCurrentFeed([]);
     }
 
     const addPersonalChat = async (contactId) => {
