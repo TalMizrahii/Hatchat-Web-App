@@ -2,6 +2,16 @@ import Chat from "../models/chat.js";
 import User from "../models/users.js";
 import Message from "../models/message.js";
 import chatService from "./chat.js"
+import {socketsArray} from "../models/socketsArray.js";
+
+const sendMessage = async (username, fullMsg) => {
+    try {
+        const socket = await socketsArray[username];
+        await socket.emit('userReceiveMessage', fullMsg);
+    } catch (err) {
+        console.log("Sending message failed!");
+    }
+}
 
 
 const addMessage = async (id, content, connectUsername) => {
@@ -37,6 +47,22 @@ const addMessage = async (id, content, connectUsername) => {
                 "content": content
             }
 
+            const fullMsg = {
+                "chatId": id,
+                "message": {
+                    "id": messageID,
+                    "created": new Date(),
+                    "sender": {
+                        "username": sender.username,
+                        "displayName": sender.displayName,
+                        "profilePic": sender.profilePic
+                    },
+                    "content": content
+                }
+            }
+
+            await sendMessage(user0.username, fullMsg);
+
             await newMessage.save();
             chat.messages.push(newMessage);
             await chat.save();
@@ -52,7 +78,7 @@ const addMessage = async (id, content, connectUsername) => {
 };
 
 const getMessages = async (id, connectUsername) => {
-    try{
+    try {
         const chatArray = []
         const chat = await Chat.findOne({"id": id});
         if (chat) {
@@ -76,7 +102,7 @@ const getMessages = async (id, connectUsername) => {
             return chatArray;
         }
         return false;
-    } catch (err){
+    } catch (err) {
         console.log(err);
         return false;
     }
