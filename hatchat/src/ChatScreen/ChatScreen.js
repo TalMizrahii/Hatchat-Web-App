@@ -12,13 +12,12 @@ const exitToLogin = (navigate) => {
     return navigate('/')
 };
 
-function ChatScreen({activeUser, currentUsernameAndToken}) {
+function ChatScreen({userSocket, activeUser, currentUsernameAndToken}) {
     const [searchContent, setSearchContent] = useState("");
     const [filteredContacts, setFilteredContacts] = useState([]);
     const [currentFeed, setCurrentFeed] = useState([]);
     const [currentContactId, setCurrentContactId] = useState(-1);
     const navigate = useNavigate();
-    const [socket, setSocket] = useState(null);
 
     let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
 
@@ -35,11 +34,6 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             }
         };
         const res = fetchData(); // Call the fetchData function
-        if (socket === null) {
-            return;
-        }
-        const socket = io('http://localhost:5000');
-        socket.emit('join', currentUsernameAndToken.username);
         // Add missing dependencies to the dependency array
     }, [navigate, currentUsernameAndToken]);
 
@@ -257,7 +251,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             }
 
             const contact = {
-                id: response.id,
+                id: parseInt(response.id),
                 name: response.users[userNumber].displayName,
                 bio: "",
                 profilePic: response.users[userNumber].profilePic,
@@ -276,17 +270,19 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
         }
     }
 
-    socket.on('userReceiveMessage', (content) => {
-        if (currentContactId === content.id) {
-            setCurrentFeed(prevFeed => [...prevFeed, content.message]);
-            return;
-        }
-        if (filteredContacts.some((contact) => contact.id === content.id)) {
-            handleContactSwitch(content.id);
-            return;
-        }
-        const res = addPersonalChat(content.id);
-    });
+    userSocket.on('userReceiveMessage', (content) => {
+            console.log(content.id);
+            console.log(content);
+            if (currentContactId === content.id) {
+                setCurrentFeed(prevFeed => [...prevFeed, content.message]);
+                return;
+            }
+            if (filteredContacts.some((contact) => contact.id === content.id)) {
+                handleContactSwitch(content.id);
+                return;
+            }
+            const res = addPersonalChat(content.id);
+        });
 
 
     return (

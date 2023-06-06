@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
-function InputMsgLowerBar({ handleFirstNextMessage }) {
+function InputMsgLowerBar({handleFirstNextMessage}) {
 
     const [textMsg, setTextMsg] = useState('');
 
@@ -26,7 +26,6 @@ function InputMsgLowerBar({ handleFirstNextMessage }) {
             setTextMsg("");
         }
     };
-
 
     const handleInputChange = (event) => {
         setTextMsg(event.target.value);

@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Navigate, Outlet, Route, Routes} from 'react-ro
 import LoginScreen from './LoginScreen/LoginScreen';
 import ChatScreen from './ChatScreen/ChatScreen';
 import RegistrationScreen from './RegistrationScreen/RegistrationScreen';
+import {io} from "socket.io-client";
 
 const App = () => {
     const [currentUsernameAndToken, setCurrentUsernameAndToken] = useState({
@@ -12,6 +13,7 @@ const App = () => {
         profilePic: 'avatar 1'
     });
     const [activeUser, setActiveUser] = useState(null);
+    const [userSocket, setUserSocket] = useState(null);
 
 
     const handleCreateAccount = async (
@@ -45,6 +47,7 @@ const App = () => {
             await handleUserToServer(newUser, navigate);
         }
     };
+
     async function handleUserToServer(newUser, navigate) {
         const data = {
             username: newUser.userName.toString(),
@@ -61,8 +64,8 @@ const App = () => {
         });
         if (res.ok) {
             const responseData = await res.text();
-            navigate('/');
             alert('created successfully');
+            navigate('/');
         } else {
             const responseData = await res.text();
             alert('Error during creation.');
@@ -75,14 +78,15 @@ const App = () => {
                 <Route path="/" element={<Outlet/>}>
                     <Route
                         path="/"
-                        element={<LoginScreen setActiveUser={setActiveUser}
+                        element={<LoginScreen setUserSocket={setUserSocket} setActiveUser={setActiveUser}
                                               setCurrentUsernameAndToken={setCurrentUsernameAndToken}/>}
                     />
 
                     <Route path="/chat" element={activeUser ?
-                        <ChatScreen activeUser={activeUser}
+                        <ChatScreen userSocket={userSocket}
+                                    activeUser={activeUser}
                                     currentUsernameAndToken={currentUsernameAndToken}/> :
-                        <Navigate to="/" />}/>
+                        <Navigate to="/"/>}/>
 
                     <Route
                         path="/register"

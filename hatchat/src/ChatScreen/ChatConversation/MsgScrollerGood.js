@@ -5,5 +5,4 @@ function MsgScrollerGood({children}) {
         </div>
     );
 }
-
 export default MsgScrollerGood;

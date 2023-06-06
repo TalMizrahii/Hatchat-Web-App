@@ -7,9 +7,10 @@ import DisclaimerText from "../GeneralComponents/DisclaimerText";
 import RegisterBox from "../GeneralComponents/RegisterBox";
 import PasswordInput from "./PasswordInput";
 import {useNavigate} from "react-router-dom";
+import {io} from "socket.io-client";
 
 
-function LoginScreen({setActiveUser, setCurrentUsernameAndToken}) {
+function LoginScreen({setUserSocket, setActiveUser, setCurrentUsernameAndToken}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -53,7 +54,6 @@ function LoginScreen({setActiveUser, setCurrentUsernameAndToken}) {
         }
     };
     const getCurrentUser = async (username, tokenStatement) => {
-        console.log("getCurrentUser user ", username);
         // console.log("getCurrentUser user ", currentUsernameAndToken.token);
         // Create the path to the user in the server.
         const getUserPath = 'http://localhost:5000/api/Users/' + username;
@@ -71,6 +71,9 @@ function LoginScreen({setActiveUser, setCurrentUsernameAndToken}) {
         } else {
             const currentActiveUser = await res.json();
             setActiveUser(currentActiveUser);
+            const userSocket = await io('http://localhost:5000');
+            userSocket.emit('join', currentActiveUser.username);
+            setUserSocket(userSocket);
         }
     };
 
