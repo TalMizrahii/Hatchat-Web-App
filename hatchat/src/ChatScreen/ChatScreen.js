@@ -6,6 +6,7 @@ import ChatSpace from "./ChatHeaderAndList/ChatSpace";
 import ConversationSpace from "./ChatConversation/ConversationSpace";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {io} from "socket.io-client";
 
 const exitToLogin = (navigate) => {
     return navigate('/')
@@ -24,6 +25,12 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
         const fetchData = async () => {
             try {
                 await handleChatsFromServer();
+
+
+                const socket = io('http://localhost:5000');
+                socket.emit('join', currentUsernameAndToken.username);
+
+
             } catch (error) {
                 // Handle the error here
                 console.error("Error fetching user:", error);
