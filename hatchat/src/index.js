@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Navigate, Outlet, Route, Routes} from 'react-router-dom';
 import LoginScreen from './LoginScreen/LoginScreen';
 import ChatScreen from './ChatScreen/ChatScreen';
 import RegistrationScreen from './RegistrationScreen/RegistrationScreen';
-
 
 const App = () => {
     const [currentUsernameAndToken, setCurrentUsernameAndToken] = useState({
@@ -13,7 +12,6 @@ const App = () => {
         profilePic: 'avatar 1'
     });
     const [activeUser, setActiveUser] = useState(null);
-    const [socketIO, setSocketIO ]= useState(null);
 
 
     const handleCreateAccount = async (
@@ -54,7 +52,7 @@ const App = () => {
             displayName: newUser.fullName.toString(),
             profilePic: newUser.profilePicture,
         };
-        const res = await fetch('http://localhost:20233/api/Users', {
+        const res = await fetch('http://localhost:5000/api/Users', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
@@ -82,7 +80,7 @@ const App = () => {
                     />
 
                     <Route path="/chat" element={activeUser ?
-                        <ChatScreen socketIO={socketIO} setSocketIO={setSocketIO} activeUser={activeUser}
+                        <ChatScreen activeUser={activeUser}
                                     currentUsernameAndToken={currentUsernameAndToken}/> :
                         <Navigate to="/" />}/>
 

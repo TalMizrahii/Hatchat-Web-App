@@ -1,7 +1,7 @@
-const Chat = require ("../models/chat");
-const User = require("../models/users.js");
-const Message = require("../models/message.js");
-const chatService =  require( "./chat");
+import Chat from "../models/chat.js";
+import User from "../models/users.js";
+import Message from "../models/message.js";
+import chatService from "./chat.js"
 
 
 const addMessage = async (id, content, connectUsername) => {
@@ -84,4 +84,4 @@ const getMessages = async (id, connectUsername) => {
 
 };
 
-module.exports = {addMessage, getMessages}
+export default {addMessage, getMessages}

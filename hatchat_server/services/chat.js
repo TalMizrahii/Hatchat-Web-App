@@ -1,6 +1,6 @@
-const Chat = require('../models/chat');
-const User = require('../models/users');
-const Message = require('../models/message');
+import Chat from "../models/chat.js";
+import User from "../models/users.js";
+import Message from "../models/message.js";
 
 const addNewChat = async (username, connectedUsername) => {
     try {
@@ -23,6 +23,7 @@ const addNewChat = async (username, connectedUsername) => {
                 users: [saveUser, connectedUser],
                 messages: []
             });
+
 
             // Save the new chat
             const savedChat = await newChat.save();
@@ -185,4 +186,4 @@ const deleteChatByID = async (username, id) => {
 };
 
 
-module.exports = {addNewChat, getAllChats, getChatByID, deleteChatByID, chatValidation}
+export default {addNewChat, getAllChats, getChatByID, deleteChatByID, chatValidation};

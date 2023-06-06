@@ -1,5 +1,5 @@
-const userService = require ('../services/users')
-const authenticatorService = require( "../services/authenticator");
+import userService from '../services/users.js'
+import authenticatorService from "../services/authenticator.js";
 
 
 const addNewUser = async (req, res) => {
@@ -40,4 +40,4 @@ const getUserByUsername = async (req, res) => {
 };
 
 
-module.exports = {addNewUser, getUserByUserName: getUserByUsername};
+export default {addNewUser, getUserByUserName: getUserByUsername};

@@ -1,6 +1,6 @@
-const authenticatorService = require('../services/authenticator');
+import authenticatorService from '../services/authenticator.js';
 
- const isLoggedIn = (req) => {
+export const isLoggedIn = (req) => {
     // If the request has an authorization header
     if (req.headers.authorization) {
         // Extract the token from that header
@@ -29,4 +29,4 @@ const processLogin = async (req, res) => {
     }
 };
 
-module.exports = {isLoggedIn, processLogin}
+export default {isLoggedIn, processLogin}

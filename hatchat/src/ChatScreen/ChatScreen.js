@@ -6,21 +6,19 @@ import ChatSpace from "./ChatHeaderAndList/ChatSpace";
 import ConversationSpace from "./ChatConversation/ConversationSpace";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {io} from "socket.io-client";
 
 const exitToLogin = (navigate) => {
     return navigate('/')
 };
 
-function ChatScreen({setSocketIO, socketIO, activeUser, currentUsernameAndToken}) {
+function ChatScreen({activeUser, currentUsernameAndToken}) {
     const [searchContent, setSearchContent] = useState("");
     const [filteredContacts, setFilteredContacts] = useState([]);
     const [currentFeed, setCurrentFeed] = useState([]);
     const [currentContactId, setCurrentContactId] = useState(-1);
     const navigate = useNavigate();
+
     let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
-
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -37,19 +35,6 @@ function ChatScreen({setSocketIO, socketIO, activeUser, currentUsernameAndToken}
         const res = fetchData(); // Call the fetchData function
         // Add missing dependencies to the dependency array
     }, [navigate, currentUsernameAndToken]);
-
-    useEffect(() => {
-        // If the socket is connected, then return.
-        if (socketIO !== null) {
-            return;
-        }
-        // If the socket is not connected, then connect.
-        console.log("Testing")
-        const socket = io('http://localhost:20234');
-        setSocketIO(socket);
-        console.log(activeUser);
-        socket.emit('join', activeUser['username']);
-    }, [activeUser]);
 
     const handleLogout = () => {
         setSearchContent("");
@@ -71,6 +56,7 @@ function ChatScreen({setSocketIO, socketIO, activeUser, currentUsernameAndToken}
             setFilteredContacts(filtered);
         }
     };
+
 
     const addContact = (contact) => {
         const existingContact = filteredContacts.find((c) => c.id === contact.id);
@@ -94,7 +80,7 @@ function ChatScreen({setSocketIO, socketIO, activeUser, currentUsernameAndToken}
 
     const handleChatsFromServer = async () => {
         try {
-            const res = await fetch('http://localhost:20233/api/Chats', {
+            const res = await fetch('http://localhost:5000/api/Chats', {
                 method: 'get',
                 headers: {
                     'Content-Type': 'application/json',
@@ -143,7 +129,7 @@ function ChatScreen({setSocketIO, socketIO, activeUser, currentUsernameAndToken}
         // Create a data json to send to the server.
         const data = {"msg": content.text};
         const idMsg = currentContact.id + '/Messages';
-        const pathToMessageUser = 'http://localhost:20233/api/Chats/' + idMsg;
+        const pathToMessageUser = 'http://localhost:5000/api/Chats/' + idMsg;
         const res = await fetch(pathToMessageUser, {
             method: 'post',
             headers: {
@@ -161,7 +147,7 @@ function ChatScreen({setSocketIO, socketIO, activeUser, currentUsernameAndToken}
     }
 
     const handleMessagePresentation = async (contactId) => {
-        const res = await fetch('http://localhost:20233/api/Chats/' + contactId, {
+        const res = await fetch('http://localhost:5000/api/Chats/' + contactId, {
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',
@@ -172,7 +158,7 @@ function ChatScreen({setSocketIO, socketIO, activeUser, currentUsernameAndToken}
             const response = await res.json();
             setCurrentFeed(response.messages);
         } else {
-            console.log('Error getting chat');
+            // Display an error message.
         }
     };
 
@@ -218,7 +204,7 @@ function ChatScreen({setSocketIO, socketIO, activeUser, currentUsernameAndToken}
     };
 
     const handleChatDeleteFromServer = async (chatId) => {
-        const res = await fetch('http://localhost:20233/api/Chats/' + chatId, {
+        const res = await fetch('http://localhost:5000/api/Chats/' + chatId, {
             method: 'delete',
             headers: {
                 'Content-Type': 'application/json',

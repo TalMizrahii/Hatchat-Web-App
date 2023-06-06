@@ -1,5 +1,5 @@
-const authenticatorService = require( "../services/authenticator");
-const MessageService = require( "../services/message");
+import authenticatorService from "../services/authenticator.js";
+import MessageService from "../services/message.js";
 
 const addMessage = async (req, res) => {
     if (req.headers.authorization) {
@@ -50,4 +50,4 @@ const getMessage = async (req, res) => {
     }
 }
 
-module.exports = {addMessage, getMessage}
+export default {addMessage, getMessage}

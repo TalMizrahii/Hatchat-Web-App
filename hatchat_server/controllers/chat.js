@@ -1,5 +1,5 @@
-const ChatServices = require( "../services/chat");
-const authenticatorService = require("../services/authenticator");
+import ChatServices from "../services/chat.js";
+import authenticatorService from "../services/authenticator.js";
 
 
 const addNewChat = async (req, res) => {
@@ -98,4 +98,4 @@ const deleteChatByID = async (req, res) => {
     }
 }
 
-module.exports = {addNewChat, getAllChats, getChatByID, deleteChatByID}
+export default {addNewChat, getAllChats, getChatByID, deleteChatByID}

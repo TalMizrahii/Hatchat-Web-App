@@ -1,5 +1,5 @@
-const {Router} = require('express');
-const authenticatorController = require('../controllers/authenticator');
+import { Router } from 'express';
+import authenticatorController from '../controllers/authenticator.js';
 
 const router = Router();
 
@@ -7,4 +7,5 @@ router.route('/')
     .post(authenticatorController.processLogin);
 
 
-module.exports = router;
+
+export default router;
