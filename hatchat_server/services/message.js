@@ -6,7 +6,6 @@ import {socketsArray} from "../models/socketsArray.js";
 
 const sendMessage = async (username, fullMsg) => {
     try {
-        // const socket = await socketsArray.username;
         const socketObject = socketsArray[username];
         await socketObject.emit('userReceiveMessage', fullMsg);
     } catch (err) {
@@ -61,9 +60,9 @@ const addMessage = async (id, content, connectUsername) => {
                     "content": content
                 }
             }
-            if (user0.username === connectUsername){
+            if (user0.username === connectUsername) {
                 await sendMessage(user1.username, fullMsg);
-            }else {
+            } else {
                 await sendMessage(user0.username, fullMsg);
             }
 
