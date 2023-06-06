@@ -4,7 +4,7 @@ import GeneralBackground from "../GeneralComponents/GeneralBackground";
 import GeneralContainer from "./GeneralContainer";
 import ChatSpace from "./ChatHeaderAndList/ChatSpace";
 import ConversationSpace from "./ChatConversation/ConversationSpace";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {io} from "socket.io-client";
 
@@ -12,14 +12,34 @@ const exitToLogin = (navigate) => {
     return navigate('/')
 };
 
-function ChatScreen({userSocket, activeUser, currentUsernameAndToken}) {
+function ChatScreen({activeUser, currentUsernameAndToken}) {
     const [searchContent, setSearchContent] = useState("");
     const [filteredContacts, setFilteredContacts] = useState([]);
     const [currentFeed, setCurrentFeed] = useState([]);
     const [currentContactId, setCurrentContactId] = useState(-1);
     const navigate = useNavigate();
-
     let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
+    const userSocket = useRef(null);
+    useEffect(()=> {
+        userSocket.current =  io('http://localhost:5000');
+        userSocket.current.emit('join', currentUsernameAndToken.username);
+
+        userSocket.current.on('userReceiveMessage', (content) => {
+            console.log(content.id);
+            console.log(content);
+            if (currentContactId === content.id) {
+                setCurrentFeed(prevFeed => [...prevFeed, content.message]);
+                return;
+            }
+            if (filteredContacts.some((contact) => contact.id === content.id)) {
+                handleContactSwitch(content.id);
+                return;
+            }
+            const res = addPersonalChat(content.id);
+        });
+
+    },[currentUsernameAndToken]);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -249,7 +269,7 @@ function ChatScreen({userSocket, activeUser, currentUsernameAndToken}) {
             if (response.users[userNumber].username === currentUsernameAndToken.username) {
                 userNumber = 1;
             }
-
+            console.log(response.id);
             const contact = {
                 id: parseInt(response.id),
                 name: response.users[userNumber].displayName,
@@ -264,25 +284,12 @@ function ChatScreen({userSocket, activeUser, currentUsernameAndToken}) {
                 }),
             };
             await addContact(contact);
-            await handleContactSwitch(contact.id);
+            await handleContactSwitch(parseInt(response.id));
         } else {
             console.log("Error in adding a new contact.");
         }
     }
 
-    userSocket.on('userReceiveMessage', (content) => {
-            console.log(content.id);
-            console.log(content);
-            if (currentContactId === content.id) {
-                setCurrentFeed(prevFeed => [...prevFeed, content.message]);
-                return;
-            }
-            if (filteredContacts.some((contact) => contact.id === content.id)) {
-                handleContactSwitch(content.id);
-                return;
-            }
-            const res = addPersonalChat(content.id);
-        });
 
 
     return (

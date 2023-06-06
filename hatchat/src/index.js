@@ -13,7 +13,6 @@ const App = () => {
         profilePic: 'avatar 1'
     });
     const [activeUser, setActiveUser] = useState(null);
-    const [userSocket, setUserSocket] = useState(null);
 
 
     const handleCreateAccount = async (
@@ -78,14 +77,14 @@ const App = () => {
                 <Route path="/" element={<Outlet/>}>
                     <Route
                         path="/"
-                        element={<LoginScreen setUserSocket={setUserSocket} setActiveUser={setActiveUser}
+                        element={<LoginScreen setActiveUser={setActiveUser}
                                               setCurrentUsernameAndToken={setCurrentUsernameAndToken}/>}
                     />
 
                     <Route path="/chat" element={activeUser ?
-                        <ChatScreen userSocket={userSocket}
-                                    activeUser={activeUser}
-                                    currentUsernameAndToken={currentUsernameAndToken}/> :
+                        <ChatScreen
+                            activeUser={activeUser}
+                            currentUsernameAndToken={currentUsernameAndToken}/> :
                         <Navigate to="/"/>}/>
 
                     <Route

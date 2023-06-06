@@ -22,6 +22,8 @@ const io = new Server(httpServer, {
 });
 
 
+
+
 io.on('connection', socket => {
     console.log('a user connected');
 
@@ -31,12 +33,12 @@ io.on('connection', socket => {
 
     socket.on('join', (username) => {
         console.log(username + ' joined the chat');
-        socketsArray.push({username: username, socket: socket});
-    });
-    socketsArray.forEach((socket) => {
-        console.log(socket.username);
+        socketsArray[username] = socket;
+        // Now you can access the socket using the username as the key
+
     });
 });
+
 
 customEnv.env(process.env.NODE_ENV, './config');
 console.log(process.env.CONNECTION_STRING);
