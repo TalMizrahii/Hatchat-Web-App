@@ -10,7 +10,7 @@ import {useNavigate} from "react-router-dom";
 import {io} from "socket.io-client";
 
 
-function LoginScreen({setUserSocket, setActiveUser, setCurrentUsernameAndToken}) {
+function LoginScreen({setActiveUser, setCurrentUsernameAndToken}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -49,6 +49,7 @@ function LoginScreen({setUserSocket, setActiveUser, setCurrentUsernameAndToken})
                 navigate('/chat');
             }
         } catch (err) {
+            console.log(err)
             alert("error during login");
             navigate('/');
         }
@@ -71,9 +72,6 @@ function LoginScreen({setUserSocket, setActiveUser, setCurrentUsernameAndToken})
         } else {
             const currentActiveUser = await res.json();
             setActiveUser(currentActiveUser);
-            const userSocket = await io('http://localhost:5000');
-            userSocket.emit('join', currentActiveUser.username);
-            setUserSocket(userSocket);
         }
     };
 

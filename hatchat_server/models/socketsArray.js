@@ -1,1 +1,1 @@
-export const socketsArray = [];
+export const socketsArray = {};

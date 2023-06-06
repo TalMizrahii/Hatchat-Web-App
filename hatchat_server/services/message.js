@@ -7,8 +7,8 @@ import {socketsArray} from "../models/socketsArray.js";
 const sendMessage = async (username, fullMsg) => {
     try {
         // const socket = await socketsArray.username;
-        const socketObject = await socketsArray.find((socket) => socket.username === username);
-        await socketObject.socket.emit('userReceiveMessage', fullMsg);
+        const socketObject = socketsArray[username];
+        await socketObject.emit('userReceiveMessage', fullMsg);
     } catch (err) {
         console.log("Sending message failed!");
     }
@@ -61,8 +61,12 @@ const addMessage = async (id, content, connectUsername) => {
                     "content": content
                 }
             }
+            if (user0.username === connectUsername){
+                await sendMessage(user1.username, fullMsg);
+            }else {
+                await sendMessage(user0.username, fullMsg);
+            }
 
-            await sendMessage(user1.username, fullMsg);
 
             await newMessage.save();
             chat.messages.push(newMessage);
