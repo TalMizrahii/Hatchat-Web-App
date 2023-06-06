@@ -6,6 +6,7 @@ import users from './routes/users.js'
 import authenticator from './routes/authenticator.js'
 import chat from './routes/chat.js';
 import customEnv from 'custom-env';
+import {socketsArray} from "./models/socketsArray.js";
 
 const app = express();
 import {Server} from "socket.io";
@@ -29,6 +30,7 @@ io.on('connection', socket => {
 
     socket.on('join', (username) => {
         console.log(username + ' joined the chat');
+        socketsArray[username] = socket;
     });
 });
 
