@@ -4,7 +4,6 @@ import {BrowserRouter as Router, Navigate, Outlet, Route, Routes} from 'react-ro
 import LoginScreen from './LoginScreen/LoginScreen';
 import ChatScreen from './ChatScreen/ChatScreen';
 import RegistrationScreen from './RegistrationScreen/RegistrationScreen';
-import {io} from "socket.io-client"
 
 
 const App = () => {
@@ -16,15 +15,6 @@ const App = () => {
     const [activeUser, setActiveUser] = useState(null);
     const [socketIO, setSocketIO ]= useState(null);
 
-
-
-    useEffect(()=> {
-        console.log("Testing")
-        const socket = io('http://localhost:20234');
-        setSocketIO(socket);
-        console.log(activeUser);
-        socket.emit('join', activeUser['username']);
-    }, [activeUser]);
 
     const handleCreateAccount = async (
         fullName,
@@ -92,7 +82,7 @@ const App = () => {
                     />
 
                     <Route path="/chat" element={activeUser ?
-                        <ChatScreen activeUser={activeUser}
+                        <ChatScreen socketIO={socketIO} setSocketIO={setSocketIO} activeUser={activeUser}
                                     currentUsernameAndToken={currentUsernameAndToken}/> :
                         <Navigate to="/" />}/>
 

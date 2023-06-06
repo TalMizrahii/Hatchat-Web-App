@@ -6,18 +6,21 @@ import ChatSpace from "./ChatHeaderAndList/ChatSpace";
 import ConversationSpace from "./ChatConversation/ConversationSpace";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {io} from "socket.io-client";
 
 const exitToLogin = (navigate) => {
     return navigate('/')
 };
 
-function ChatScreen({activeUser, currentUsernameAndToken}) {
+function ChatScreen({setSocketIO, socketIO, activeUser, currentUsernameAndToken}) {
     const [searchContent, setSearchContent] = useState("");
     const [filteredContacts, setFilteredContacts] = useState([]);
     const [currentFeed, setCurrentFeed] = useState([]);
     const [currentContactId, setCurrentContactId] = useState(-1);
     const navigate = useNavigate();
     let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
+
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,6 +37,19 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
         const res = fetchData(); // Call the fetchData function
         // Add missing dependencies to the dependency array
     }, [navigate, currentUsernameAndToken]);
+
+    useEffect(() => {
+        // If the socket is connected, then return.
+        if (socketIO !== null) {
+            return;
+        }
+        // If the socket is not connected, then connect.
+        console.log("Testing")
+        const socket = io('http://localhost:20234');
+        setSocketIO(socket);
+        console.log(activeUser);
+        socket.emit('join', activeUser['username']);
+    }, [activeUser]);
 
     const handleLogout = () => {
         setSearchContent("");
