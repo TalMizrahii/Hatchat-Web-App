@@ -24,9 +24,7 @@ function UserInList({currentContact, handleChatDelete, contact, handleContactSwi
                 setShowButton(false);
             }
         };
-
         document.addEventListener('click', handleDocumentClick);
-
         return () => {
             document.removeEventListener('click', handleDocumentClick);
         };

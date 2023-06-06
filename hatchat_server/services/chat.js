@@ -7,6 +7,7 @@ const deleteChat = async (username, deleteChatID) => {
     try {
         const socketObject = socketsArray[username];
         await socketObject.emit('deleteChat', {'id': deleteChatID});
+        return;
     } catch (err) {
         console.log("Sending delete signal failed!");
     }

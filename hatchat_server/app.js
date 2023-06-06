@@ -22,19 +22,25 @@ const io = new Server(httpServer, {
 });
 
 
-
-
 io.on('connection', socket => {
+
+
     console.log('a user connected');
 
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
-
     socket.on('join', (username) => {
+        if (socketsArray[username] && socketsArray[username].connected) {
+            const socketObject = socketsArray[username];
+            socketObject.emit('alreadyConnected');
+            return;
+        }
         console.log(username + ' joined the chat');
         socketsArray[username] = socket;
         // Now you can access the socket using the username as the key
+    });
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+
     });
 });
 

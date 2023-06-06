@@ -21,6 +21,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
     let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
     const userSocket = useRef(null);
     useEffect(() => {
+
         userSocket.current = io('http://localhost:5000');
         userSocket.current.emit('join', currentUsernameAndToken.username);
 
@@ -37,16 +38,24 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
                 text: content.message.content,
                 timeAndDate: formatTimestamp(content.message.created),
             });
+            currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
         });
 
         userSocket.current.on('deleteChat', (content) => {
-            setFilteredContacts((prevFilteredContacts) => {
-                return prevFilteredContacts.filter((contact) => contact.id !== content.id);
-            });
-            if (currentContactId === content.id) {
-                setCurrentFeed([]);
+            console.log("id from delete: ", content.id);
+             const updatedFilteredContacts = filteredContacts.filter(
+                (contact) => contact.id !== content.id
+            );
+            setFilteredContacts(updatedFilteredContacts);
+            setCurrentFeed([]);
+            if(currentContactId === content.id){
                 setCurrentContactId(-1);
             }
+        });
+
+        userSocket.current.on('alreadyConnected', () => {
+            alert("This user is already connected");
+            exitToLogin(navigate);
         });
 
     }, [currentUsernameAndToken]);
@@ -148,7 +157,9 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
                     }
                     addContact(contact);
                 });
-                await handleMessagePresentation(allChats[0].id);
+                if (allChats.length > 0) {
+                    await handleMessagePresentation(allChats[0].id);
+                }
             }
         } catch (error) {
             // Handle the error here
@@ -200,7 +211,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
         }
 
         let id = currentContactId;
-        if(content.id){
+        if (content.id) {
             id = content.id;
         }
         setCurrentContactId(id);
