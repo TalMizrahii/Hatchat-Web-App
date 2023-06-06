@@ -18,6 +18,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
     const [currentFeed, setCurrentFeed] = useState([]);
     const [currentContactId, setCurrentContactId] = useState(-1);
     const navigate = useNavigate();
+    const [socket, setSocket] = useState(null);
 
     let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
 
@@ -25,12 +26,6 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
         const fetchData = async () => {
             try {
                 await handleChatsFromServer();
-
-
-                const socket = io('http://localhost:5000');
-                socket.emit('join', currentUsernameAndToken.username);
-
-
             } catch (error) {
                 // Handle the error here
                 console.error("Error fetching user:", error);
@@ -40,6 +35,11 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             }
         };
         const res = fetchData(); // Call the fetchData function
+        if (socket === null) {
+            return;
+        }
+        const socket = io('http://localhost:5000');
+        socket.emit('join', currentUsernameAndToken.username);
         // Add missing dependencies to the dependency array
     }, [navigate, currentUsernameAndToken]);
 
@@ -239,6 +239,55 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             return updatedContacts;
         });
     }
+
+    const addPersonalChat = async (contactId) => {
+        const res = await fetch('http://localhost:5000/api/Chats/' + contactId, {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': currentUsernameAndToken.token,
+            },
+        });
+        if (res.ok) {
+            const response = await res.json();
+
+            let userNumber = 0;
+            if (response.users[userNumber].username === currentUsernameAndToken.username) {
+                userNumber = 1;
+            }
+
+            const contact = {
+                id: response.id,
+                name: response.users[userNumber].displayName,
+                bio: "",
+                profilePic: response.users[userNumber].profilePic,
+                lastSeen: new Date().toLocaleString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                }),
+            };
+            await addContact(contact);
+            await handleContactSwitch(contact.id);
+        } else {
+            console.log("Error in adding a new contact.");
+        }
+    }
+
+    socket.on('userReceiveMessage', (content) => {
+        if (currentContactId === content.id) {
+            setCurrentFeed(prevFeed => [...prevFeed, content.message]);
+            return;
+        }
+        if (filteredContacts.some((contact) => contact.id === content.id)) {
+            handleContactSwitch(content.id);
+            return;
+        }
+        const res = addPersonalChat(content.id);
+    });
+
 
     return (
         <>

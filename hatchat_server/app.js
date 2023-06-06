@@ -20,6 +20,9 @@ const io = new Server(httpServer, {
     },
 });
 
+const sockets = {};
+
+
 io.on('connection', socket => {
     console.log('a user connected');
 
@@ -28,6 +31,7 @@ io.on('connection', socket => {
     });
 
     socket.on('join', (username) => {
+        sockets[username] = socket;
         console.log(username + ' joined the chat');
     });
 });
