@@ -6,7 +6,32 @@ import users from './routes/users.js'
 import authenticator from './routes/authenticator.js'
 import chat from './routes/chat.js';
 import customEnv from 'custom-env';
+
 const app = express();
+import {Server} from "socket.io";
+import {createServer} from "http";
+
+const httpServer = createServer(app);
+
+const io = new Server(httpServer, {
+    cors: {
+        origin: 'http://localhost:5000',
+        methods: ["GET", "POST", "DELETE"],
+    },
+});
+
+io.on('connection', socket => {
+    console.log('a user connected');
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+
+    socket.on('join', (username) => {
+        console.log(username + ' joined the chat');
+    });
+});
+
 
 customEnv.env(process.env.NODE_ENV, './config');
 console.log(process.env.CONNECTION_STRING);
@@ -35,4 +60,4 @@ app.use('/api/Users', users);
 app.use('/api/Tokens', authenticator);
 app.use('/api/Chats', chat);
 
-app.listen(process.env.PORT);
+httpServer.listen(process.env.PORT);
