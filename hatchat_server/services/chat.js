@@ -1,7 +1,16 @@
 import Chat from "../models/chat.js";
 import User from "../models/users.js";
 import Message from "../models/message.js";
+import {socketsArray} from "../models/socketsArray.js";
 
+const deleteChat = async (username, deleteChatID) => {
+    try {
+        const socketObject = socketsArray[username];
+        await socketObject.emit('deleteChat', deleteChatID);
+    } catch (err) {
+        console.log("Sending delete signal failed!");
+    }
+}
 const addNewChat = async (username, connectedUsername) => {
     try {
         if (username !== connectedUsername) {
@@ -177,6 +186,11 @@ const deleteChatByID = async (username, id) => {
         const user1 = await User.findOne({"_id": chat.users[1]}).lean();
         if (!await chatValidation(await user0.username, await user1.username, username)) {
             return false;
+        }
+        if (user0.username === username) {
+            await deleteChat(user1.username, id);
+        } else {
+            await deleteChat(user0.username, id);
         }
         return Chat.deleteOne({id})
     } catch (error) {
