@@ -18,26 +18,30 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
     const [currentFeed, setCurrentFeed] = useState([]);
     const [currentContactId, setCurrentContactId] = useState(-1);
     const navigate = useNavigate();
-    let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
+    let currentContact;
     const userSocket = useRef(null);
     useEffect(() => {
         userSocket.current = io('http://localhost:5000');
         userSocket.current.emit('join', currentUsernameAndToken.username);
 
         userSocket.current.on('userReceiveMessage', (content) => {
-            if (currentContactId === content.id) {
+            if (currentContactId == content.id) {
                 setCurrentFeed(prevFeed => [...prevFeed, content.message]);
-            } else if (filteredContacts.some((contact) => contact.id === content.id)) {
+                updateContactInList({
+                    id: content.id,
+                    text: content.content,
+                    timeAndDate: formatTimestamp(content.message.created),
+                });
+            } else if (filteredContacts.some((contact) => contact.id == content.id)) {
                 handleContactSwitch(content.id);
+                updateContactInList({
+                    id: content.id,
+                    text: content.content,
+                    timeAndDate: formatTimestamp(content.message.created),
+                });
             } else {
                 const res = addPersonalChat(content.id);
             }
-            updateContactInList({
-                id: content.id,
-                text: content.message.content,
-                timeAndDate: formatTimestamp(content.message.created),
-            });
-            currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
         });
 
         userSocket.current.on('deleteChat', (content) => {
@@ -101,6 +105,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             setFilteredContacts([...filteredContacts]);
         }
         setCurrentContactId(contact.id);
+        currentContact = contact;
     };
 
     const formatTimestamp = (timestamp) => {
@@ -166,7 +171,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
     const handleMessageToServer = async (content) => {
         // Create a data json to send to the server.
         const data = {"msg": content.text};
-        const idMsg = currentContact.id + '/Messages';
+        const idMsg = currentContactId + '/Messages';
         const pathToMessageUser = 'http://localhost:5000/api/Chats/' + idMsg;
         const res = await fetch(pathToMessageUser, {
             method: 'post',
@@ -293,20 +298,13 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             if (response.users[userNumber].username === currentUsernameAndToken.username) {
                 userNumber = 1;
             }
-
             const contact = {
                 id: response.id,
-                name: response.users[userNumber].displayName,
-                bio: "",
+                name: response.users[userNumber].username,
                 profilePic: response.users[userNumber].profilePic,
-                lastSeen: new Date().toLocaleString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                    hour12: true,
-                }),
-            };
+                bio: response.messages[response.messages.length - 1].content,
+                lastSeen: formatTimestamp(response.messages[response.messages.length - 1].created),
+            }
             await addContact(contact);
             await handleContactSwitch(response.id);
         } else {

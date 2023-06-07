@@ -40,7 +40,7 @@ function UserInList({currentContact, handleChatDelete, contact, handleContactSwi
 
     let classname = "contactChat";
 
-    if(currentContact && currentContact.name === contact.name){
+    if (currentContact && currentContact.name === contact.name) {
         classname = "contactChatIndexed";
     }
 
@@ -56,7 +56,8 @@ function UserInList({currentContact, handleChatDelete, contact, handleContactSwi
             </div>
             {showButton && (
                 <button type="button" className="deleteChat btn btn-outline-danger right-click-button"
-                        onClick={handleButtonClick}>
+                    // onClick={handleButtonClick}
+                >
                     Delete Chat
                 </button>
             )}
