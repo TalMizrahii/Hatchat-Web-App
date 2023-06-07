@@ -24,36 +24,53 @@ This project is a web application developed using [React](https://react.dev/) an
  
 The chat application is divided into two parts: the server-side, implemented in Node.js and utilizing [mongoDB](https://www.mongodb.com/), and the client-side, implemented using HTML, CSS, JavaScript, and React.
  
-  ## The Client
+  ## The Client-Side
   
-  In the client side, the user is browsing to the client's index page, which is the login screen of the app.
+### Client-side: Login and Registration
+The client-side of the application starts with the user browsing to the client's index page, which serves as the login screen for the app.
   
   <img width="400" alt="rm1" src="https://user-images.githubusercontent.com/103560553/234780293-e618d743-7ac0-4805-a298-e5d668767660.PNG">
 
 
- If he is not registerd, he can click on the "Register" Button on the buttom of the screen to brows to the register screen. It includes a registration form for new users. [Bootstrap](https://getbootstrap.com/) is used for styling, and the form adapts to different devices. The registration form includes input fields for username, password, display name, and profile picture. Similar to the login screen, the fields are validated, and appropriate visual feedback is provided.
-
+  If the user is not registered, they can click on the "Register" button at the bottom of the screen to access the registration page. The registration screen includes a form for new users to fill out. Styling is done using [Bootstrap](https://getbootstrap.com/), ensuring a responsive design across different devices. The registration form includes input fields for username, password, display name, and profile picture. Similar to the login screen, the fields are validated, and appropriate visual feedback is provided.
+  
 <img width="400" alt="rm2" src="https://user-images.githubusercontent.com/103560553/234783338-8691a917-fed8-44a5-86be-e5060ddf356e.PNG">
   <img width="200" alt="1" src="https://github.com/TalMizrahii/AP2-EX2/assets/103560553/2b496ddb-4061-445f-a5ac-c1a8ae1aac41">
 <img width="200" alt="2" src="https://github.com/TalMizrahii/AP2-EX2/assets/103560553/448fbd76-beae-4599-b1db-2d4ec3738959">
 
   
-  The chat screen contains a list of recent conversations, images of the contant and a date and time note about the last message made in this conveersation. The second part in the conversation is a the chat itself. It contains all messages in the conversation with the spesific contant. The image of the contant is located in the left upper part of the screen. If the user had privious converssations, they will be presented to him there.
+### Chat Screen
+The chat screen consists of two main parts. Firstly, there is a list of recent conversations displaying the participants' profile pictures, along with a timestamp of the last message sent in each conversation. If the user has previous conversations, they will be presented in this list.
 
 <img width="400" alt="Capture" src="https://github.com/TalMizrahii/AP2-EX2/assets/103560553/46412cf8-22df-466d-a163-9b432efbdfa9">
 
-  When adding a new user, the app is updating the contact list by placing the contact who sent the most recent message at the top, and setting the timestamp of the last message and displaying a snippet of it within the contact entry in the list.
+### Updating Contact List
+When adding a new user, the app updates the contact list by placing the contact who sent the most recent message at the top. The timestamp of the last message is set, and a snippet of it is displayed within the contact entry in the list.
   
 <img width="200" alt="3 1" src="https://github.com/TalMizrahii/AP2-EX2/assets/103560553/087ba499-acf6-459c-bd0e-1774ca6e6b83">
 <img width="200" alt="4" src="https://github.com/TalMizrahii/AP2-EX2/assets/103560553/433bcdb9-037c-437d-9306-6bbab6f07885">
   
 
-## Implementation
+## The Server-Side
 
- 
+The server-side of the application is responsible for handling the backend logic and communication with the database. It utilizes the following technologies and frameworks:
 
-## Cool Featues
+* Node.js - The server-side is implemented using Node.js, a JavaScript runtime built on Chrome's V8 JavaScript engine.
   
+* Express.js - Express.js is used as the web application framework for handling HTTP requests and setting up API routes.
+  
+* Socket.IO - Socket.IO is integrated to enable real-time communication between the server and clients.
+  
+* MongoDB - The server connects to a MongoDB database to store and retrieve data.
+  
+* Mongoose - Mongoose is used as an Object Data Modeling (ODM) library for MongoDB, providing a simplified interface for interacting with the database.
+
+<img width="400" alt="1" src="https://github.com/TalMizrahii/AP2-Ex3/assets/103560553/cf8f79b6-f0b0-4b9d-89cf-7e8bc1a6c323">
+
+
+In the provided code snippet, the server-side code is structured using the Model-View-Controller (MVC) design pattern. The express module is used to create an instance of the Express app, which handles incoming HTTP requests. The server also establishes a Socket.IO connection to enable real-time communication.
+
+The code connects to a MongoDB database using the mongoose library, with the connection string and port specified in environment variables. API routes for users, tokens, and chats are set up using the respective routers (users, authenticator, and chat). CORS is enabled to allow requests from the specified origin
 
  
 ## Installing And Executing
