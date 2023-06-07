@@ -23,10 +23,7 @@ const io = new Server(httpServer, {
 
 
 io.on('connection', socket => {
-
-
     console.log('a user connected');
-
     socket.on('join', (username) => {
         if (socketsArray[username] && socketsArray[username].connected) {
             const socketObject = socketsArray[username];

@@ -21,7 +21,6 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
     let currentContact = filteredContacts.find((contact) => contact.id === currentContactId);
     const userSocket = useRef(null);
     useEffect(() => {
-
         userSocket.current = io('http://localhost:5000');
         userSocket.current.emit('join', currentUsernameAndToken.username);
 
@@ -43,14 +42,11 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
 
         userSocket.current.on('deleteChat', (content) => {
             console.log("id from delete: ", content.id);
-             const updatedFilteredContacts = filteredContacts.filter(
-                (contact) => contact.id !== content.id
-            );
-            setFilteredContacts(updatedFilteredContacts);
+            const prevContact = filteredContacts.filter(contact => contact.id !== content.id);
+            setFilteredContacts(prevContact);
             setCurrentFeed([]);
-            if(currentContactId === content.id){
-                setCurrentContactId(-1);
-            }
+            setCurrentContactId(-1);
+            currentContact = null;
         });
 
         userSocket.current.on('alreadyConnected', () => {
@@ -59,7 +55,6 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
         });
 
     }, [currentUsernameAndToken]);
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -300,7 +295,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
             }
 
             const contact = {
-                id: parseInt(response.id),
+                id: response.id,
                 name: response.users[userNumber].displayName,
                 bio: "",
                 profilePic: response.users[userNumber].profilePic,
@@ -313,7 +308,7 @@ function ChatScreen({activeUser, currentUsernameAndToken}) {
                 }),
             };
             await addContact(contact);
-            await handleContactSwitch(parseInt(response.id));
+            await handleContactSwitch(response.id);
         } else {
             console.log("Error in adding a new contact.");
         }
