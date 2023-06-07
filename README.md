@@ -95,7 +95,7 @@ $ npm install
 # Start the program in your default browser.
 $ npm start
 ```
-After that, you can brose to http://localhost:5000/ to enter the app.
+After that, you can browse to http://localhost:5000/ to enter the app.
 ## Authors
 * [@Yuval Arbel](https://github.com/YuvalArbel1)
 * [@Tal Mizrahi](https://github.com/TalMizrahii)
