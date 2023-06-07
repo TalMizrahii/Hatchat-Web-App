@@ -50,7 +50,9 @@ When adding a new user, the app updates the contact list by placing the contact 
 <img width="200" alt="3 1" src="https://github.com/TalMizrahii/AP2-EX2/assets/103560553/087ba499-acf6-459c-bd0e-1774ca6e6b83">
 <img width="200" alt="4" src="https://github.com/TalMizrahii/AP2-EX2/assets/103560553/433bcdb9-037c-437d-9306-6bbab6f07885">
   
-
+*Please note that a user cannot be simultaneously logged in with multiple tabs. Therefore, if you wish to establish a new connection, it may be necessary to refresh your page.*
+  
+  
 ## The Server-Side
 
 The server-side of the application is responsible for handling the backend logic and communication with the database. It utilizes the following technologies and frameworks:
@@ -93,7 +95,7 @@ $ npm install
 # Start the program in your default browser.
 $ npm start
 ```
-
+After that, you can brose to http://localhost:5000/ to enter the app.
 ## Authors
 * [@Yuval Arbel](https://github.com/YuvalArbel1)
 * [@Tal Mizrahi](https://github.com/TalMizrahii)
