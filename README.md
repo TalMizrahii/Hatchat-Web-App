@@ -79,13 +79,13 @@ To clone and run this application, you'll need [Git](https://git-scm.com) instal
 
 ```bash
 # Clone this repository.
-$ git clone https://github.com/TalMizrahii/AP2-EX2
+$ git clone https://github.com/TalMizrahii/AP2-Ex3
 
 # Go into the repository.
-$ cd AP2-EX2
+$ cd AP2-Ex3
   
 # Go into the project folder.
-$ cd hatchat
+$ cd hatchat_server
   
 # Install the needed libraries.
 $ npm install
