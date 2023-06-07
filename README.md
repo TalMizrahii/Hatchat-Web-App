@@ -22,9 +22,9 @@
   
 This project is a web application developed using [React](https://react.dev/) and [nodeJS](https://nodejs.org/en).
  
-  The is divided in to two parts; The server side, implemented in nodeJS and useing [mongoDB](https://www.mongodb.com/), and the client side, implemented using HTML, CSS, Javascript and React.
+The chat application is divided into two parts: the server-side, implemented in Node.js and utilizing [mongoDB](https://www.mongodb.com/), and the client-side, implemented using HTML, CSS, JavaScript, and React.
  
-  ### The Client
+  ## The Client
   
   In the client side, the user is browsing to the client's index page, which is the login screen of the app.
   
@@ -46,7 +46,6 @@ This project is a web application developed using [React](https://react.dev/) an
   
 <img width="200" alt="3 1" src="https://github.com/TalMizrahii/AP2-EX2/assets/103560553/087ba499-acf6-459c-bd0e-1774ca6e6b83">
 <img width="200" alt="4" src="https://github.com/TalMizrahii/AP2-EX2/assets/103560553/433bcdb9-037c-437d-9306-6bbab6f07885">
-  
   
 
 ## Implementation
