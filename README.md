@@ -11,7 +11,8 @@
 
 <p align="center">
   <a href="#description">Description</a> •
-  <a href="#implementation">Implementation</a> •
+  <a href="#The Client-Side">The Client-Side</a> •
+  <a href="#The Server-Side">The Server-Side</a> •
   <a href="#installing-and-executing">Installing And Executing</a> •
   <a href="#authors">Authors</a> 
 </p>
