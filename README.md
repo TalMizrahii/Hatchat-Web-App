@@ -72,7 +72,7 @@ The server-side of the application is responsible for handling the backend logic
 
 In the provided code snippet, the server-side code is structured using the Model-View-Controller (MVC) design pattern. The express module is used to create an instance of the Express app, which handles incoming HTTP requests. The server also establishes a Socket.IO connection to enable real-time communication.
 
-The code connects to a MongoDB database using the mongoose library, with the connection string and port specified in environment variables. API routes for users, tokens, and chats are set up using the respective routers (users, authenticator, and chat). CORS is enabled to allow requests from the specified origin
+The code connects to a MongoDB database using the mongoose library, with the connection string and port specified in environment variables. API routes for users, tokens, and chats are set up using the respective routers (users, authenticator, and chat). CORS is enabled to allow requests from the specified origin.
 
  
 ## Installing And Executing
