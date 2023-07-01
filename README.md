@@ -68,7 +68,7 @@ The server-side of the application is responsible for handling the backend logic
   
 * Mongoose - Mongoose is used as an Object Data Modeling (ODM) library for MongoDB, providing a simplified interface for interacting with the database.
 
-<img width="400" alt="1" src="https://github.com/TalMizrahii/AP2-Ex3/assets/103560553/cf8f79b6-f0b0-4b9d-89cf-7e8bc1a6c323">
+<img width="600" alt="serverWeb" src="https://github.com/TalMizrahii/AP2-Ex3/assets/103560553/9d7ce088-6aff-43af-89d6-14b8f51f8211">
 
 
 In the provided code snippet, the server-side code is structured using the Model-View-Controller (MVC) design pattern. The express module is used to create an instance of the Express app, which handles incoming HTTP requests. The server also establishes a Socket.IO connection to enable real-time communication.
