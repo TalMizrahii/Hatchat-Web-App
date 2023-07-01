@@ -18,8 +18,7 @@
 </p>
 
 ## Description
-  
-*The final project seats in the "main" branch!*
+
   
 This project is a web application developed using [React](https://react.dev/) and [nodeJS](https://nodejs.org/en).
  
