@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://github.com/TalMizrahii/AP2-Ex3"><img src="https://github.com/TalMizrahii/AP2-Ex3/assets/103560553/dc34dd83-acb4-4469-b73a-0f94764b3421" alt="HTML" width="800"></a>
+  <a href="https://github.com/TalMizrahii/AP2-Ex3"><img src="https://upload.wikimedia.org/wikipedia/commons/1/10/CSS3_and_HTML5_logos_and_wordmarks.svg" alt="HTML" width="300"></a>
   <br>
   Advanced-Programming-2
   <br>
